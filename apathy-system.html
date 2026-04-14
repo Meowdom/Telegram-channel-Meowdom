@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Выход из апатии — Система изменений</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,600;0,700;0,900;1,700;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #0e0e0e;
+  --paper:  #f2ede6;
+  --paper2: #ebe4db;
+  --lime:   #c8f535;
+  --sage:   #6bbd7a;
+  --rust:   #e05c30;
+  --mid:    #6b6358;
+  --line:   rgba(14,14,14,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: 54px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+}
+
+.nav-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.nav-links {
+  display: flex; gap: 2rem; list-style: none;
+}
+.nav-links a {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--mid);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+/* ── WRAP ── */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
+
+/* ── HERO ── */
+.hero {
+  padding-top: 54px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-left {
+  padding: 5rem 3rem 5rem 0;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-right {
+  padding: 5rem 0 5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-tag {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 0.92;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 2rem;
+}
+
+h1 .accent { color: var(--rust); font-style: italic; }
+h1 .bg-lime {
+  background: var(--lime);
+  padding: 0 0.15em;
+  display: inline-block;
+  line-height: 1;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--mid);
+  max-width: 400px;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+.hero-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.hero-stat {
+  padding: 1.5rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.hero-stat:nth-child(even) { border-right: none; }
+.hero-stat:nth-child(3), .hero-stat:nth-child(4) { border-bottom: none; }
+
+.stat-big {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--ink);
+}
+.stat-small {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-top: 0.3rem;
+}
+
+.hero-quote {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--mid);
+  border-left: 3px solid var(--lime);
+  padding-left: 1.25rem;
+  margin-top: 2rem;
+}
+
+/* ── SECTION ── */
+.section {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.sec-label {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.sec-label::after {
+  content: '';
+  flex: 1; max-width: 40px;
+  height: 1px; background: var(--line);
+}
+
+h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin-bottom: 2.5rem;
+}
+
+h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.6rem;
+}
+
+p { color: var(--mid); margin-bottom: 1rem; font-weight: 300; }
+
+/* ── COMPARISON TABLE ── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+.compare-table th {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-bottom: 2px solid var(--ink);
+  border-right: 1px solid var(--line);
+}
+.compare-table th:last-child { border-right: none; }
+.compare-table th.h-apathy { border-top: 3px solid var(--rust); }
+.compare-table th.h-dep    { border-top: 3px solid var(--mid); }
+.compare-table th.h-burn   { border-top: 3px solid var(--lime); background: rgba(200,245,53,0.08); }
+
+.compare-table td {
+  padding: 0.9rem 1.25rem;
+  font-size: 0.88rem;
+  color: var(--mid);
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.55;
+  font-weight: 300;
+}
+.compare-table td:last-child { border-right: none; }
+.compare-table td:first-child {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  font-weight: 700;
+}
+.compare-table tbody tr:hover td { background: rgba(14,14,14,0.02); }
+
+/* ── ZONES ── */
+.zones-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.zone-card {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .25s;
+}
+.zone-card:hover { border-color: rgba(14,14,14,0.3); }
+
+.zone-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(14,14,14,0.06);
+  position: absolute;
+  top: 0.5rem; right: 1rem;
+}
+
+.zone-label {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: 2px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.zone-card p { font-size: 0.9rem; }
+
+/* ── KAIZEN ── */
+.kaizen-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.kaizen-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.5rem;
+  transition: all .2s;
+  position: relative;
+}
+.kaizen-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(14,14,14,0.08); }
+
+.kc-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 0.5rem;
+}
+.kc-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.kc-desc { font-size: 0.85rem; line-height: 1.6; }
+.kc-result {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--lime);
+  border-radius: 2px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* ── IKIGAI ── */
+.ikigai-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.ikigai-diagram {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 380px;
+}
+
+.ikigai-circles {
+  position: relative;
+  width: 100%; height: 100%;
+}
+
+.ik-circle {
+  position: absolute;
+  width: 60%; height: 60%;
+  border-radius: 50%;
+  opacity: 0.18;
+  transition: opacity .3s;
+}
+.ik-circle:hover { opacity: 0.28; }
+.ik-1 { top: 0;    left: 20%;  background: var(--rust); }
+.ik-2 { top: 20%;  left: 40%;  background: var(--sage); }
+.ik-3 { bottom: 0; left: 20%;  background: var(--ink);  }
+.ik-4 { top: 20%;  left: 0;    background: #e8b730; }
+
+.ik-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+}
+.ik-center-word {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.ik-center-sub {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+
+.ik-labels { display: flex; flex-direction: column; gap: 1rem; }
+
+.ik-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition: border-color .2s;
+}
+.ik-item:hover { border-color: rgba(14,14,14,0.3); }
+
+.ik-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+.ik-dot-1 { background: var(--rust); }
+.ik-dot-2 { background: var(--sage); }
+.ik-dot-3 { background: var(--ink); }
+.ik-dot-4 { background: #e8b730; }
+
+.ik-text h4 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+.ik-text p { font-size: 0.78rem; margin-bottom: 0; }
+
+/* ── WOOP ── */
+.woop-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 2rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.woop-step {
+  padding: 2rem 1.5rem;
+  border-right: 1px solid var(--line);
+  position: relative;
+  transition: background .2s;
+}
+.woop-step:hover { background: rgba(200,245,53,0.08); }
+.woop-step:last-child { border-right: none; }
+
+.woop-letter {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--lime);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.woop-word {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+.woop-desc { font-size: 0.82rem; line-height: 1.55; }
+
+/* ── LOGOTERM ── */
+.logo-paths {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.logo-path {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.75rem;
+  transition: all .25s;
+  background: white;
+}
+.logo-path:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(14,14,14,0.07); }
+
+.lp-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
+.lp-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+}
+.lp-desc { font-size: 0.85rem; line-height: 1.6; }
+
+/* ── STEPS ── */
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 2rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.step-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--line);
+  transition: background .2s;
+  cursor: default;
+}
+.step-row:last-child { border-bottom: none; }
+.step-row:hover { background: rgba(14,14,14,0.02); }
+
+.step-n {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: rgba(14,14,14,0.1);
+  line-height: 1;
+  text-align: center;
+}
+.step-content h3 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.step-content p { font-size: 0.85rem; margin-bottom: 0; }
+.step-tag {
+  white-space: nowrap;
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  color: var(--mid);
+}
+
+/* ── NUTRIENTS ── */
+.nutr-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.nutr-table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.nutr-table { width: 100%; border-collapse: collapse; }
+.nutr-table th {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background: var(--paper2);
+  border-bottom: 1px solid var(--line);
+}
+.nutr-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+.nutr-table tbody tr:last-child td { border-bottom: none; }
+.nutr-table .b12-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.bar-fill {
+  height: 6px;
+  border-radius: 100px;
+  background: var(--lime);
+  border: 1px solid rgba(14,14,14,0.1);
+}
+.nutr-table .product { font-weight: 500; }
+.nutr-table .value {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.75rem;
+  color: var(--mid);
+  white-space: nowrap;
+}
+
+.sleep-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sleep-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  transition: all .2s;
+}
+.sleep-tip:hover { border-color: rgba(14,14,14,0.25); }
+.tip-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+.tip-text h4 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.2rem;
+}
+.tip-text p { font-size: 0.82rem; margin-bottom: 0; }
+
+/* ── CONCLUSION ── */
+.conclusion {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 5rem 0;
+}
+
+.conclusion .sec-label { color: rgba(242,237,230,0.35); }
+.conclusion .sec-label::after { background: rgba(242,237,230,0.15); }
+.conclusion h2 { color: var(--paper); margin-bottom: 1.5rem; }
+
+.conclusion-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.con-block {
+  border: 1px solid rgba(242,237,230,0.12);
+  border-radius: 4px;
+  padding: 1.5rem;
+  transition: border-color .25s;
+}
+.con-block:hover { border-color: rgba(200,245,53,0.4); }
+
+.con-level {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 0.5rem;
+}
+.con-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+  margin-bottom: 0.75rem;
+}
+.con-items {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.con-items li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.83rem;
+  color: rgba(242,237,230,0.55);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.con-items li::before {
+  content: '—';
+  color: var(--lime);
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  margin-top: 0.15rem;
+}
+
+.warning-strip {
+  background: var(--lime);
+  color: var(--ink);
+  padding: 1rem 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.warning-strip strong {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  padding: 0.3rem 0.7rem;
+  background: var(--ink);
+  color: var(--lime);
+  border-radius: 2px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(242,237,230,0.3);
+  padding: 1.5rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(242,237,230,0.06);
+}
+footer span {
+  font-family: 'Courier Prime', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+}
+
+/* ── REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.revealed { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { border-right: none; border-bottom: 1px solid var(--line); }
+  .hero-right { padding: 2rem 0; }
+  .woop-steps { grid-template-columns: 1fr 1fr; }
+  .logo-paths { grid-template-columns: 1fr; }
+  .conclusion-grid { grid-template-columns: 1fr; }
+  .nutr-layout { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb { background: rgba(14,14,14,0.2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Преодоление Апатии</div>
+  <ul class="nav-links">
+    <li><a href="#diagnosis">Диагностика</a></li>
+    <li><a href="#zones">Зоны</a></li>
+    <li><a href="#methods">Методики</a></li>
+    <li><a href="#biology">Биология</a></li>
+    <li><a href="#exit">Выход</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Психология · Нейробиология · Практика</div>
+    <h1>
+      Выход<br>из <span class="accent">апатии</span><br>
+      <span class="bg-lime">системно</span>
+    </h1>
+    <p class="hero-desc">
+      Комплексный анализ механизмов преодоления апатии и расширения зоны комфорта. От биологической оптимизации до экзистенциального смысла.
+    </p>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-stat-grid">
+      <div class="hero-stat">
+        <div class="stat-big">3</div>
+        <div class="stat-small">Уровня<br>вмешательства</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-big">4</div>
+        <div class="stat-small">Инструментальных<br>методики</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-big">1%</div>
+        <div class="stat-small">Ежедневный<br>прогресс кайдзен</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-big">2нед</div>
+        <div class="stat-small">Порог обращения<br>к специалисту</div>
+      </div>
+    </div>
+
+    <div class="hero-quote">
+      «Апатия — это не слабость, а предохранитель нервной системы. Задача — перезагрузить, а не сломать.»
+    </div>
+  </div>
+</section>
+
+<!-- DIAGNOSIS -->
+<section class="section" id="diagnosis">
+  <div class="sec-label">01 · Дифференциальная диагностика</div>
+  <h2>Апатия, депрессия<br>или выгорание?</h2>
+  <p style="max-width:580px">Три состояния имеют пересекающиеся симптомы, но принципиально разную природу и методы терапии. Правильная идентификация — основа протокола восстановления.</p>
+
+  <div style="overflow-x:auto; margin-top:2rem">
+    <table class="compare-table reveal">
+      <thead>
+        <tr>
+          <th>Параметр</th>
+          <th class="h-apathy">Апатия</th>
+          <th class="h-dep">Депрессия</th>
+          <th class="h-burn">Выгорание</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Эмоциональный фон</td>
+          <td>«Заморозка» — ни радости, ни печали. Полная эмоциональная плоскость</td>
+          <td>Глубокая подавленность, тоска, чувство вины и безнадёжности</td>
+          <td>Цинизм, дистанцирование от рабочих задач, раздражительность</td>
+        </tr>
+        <tr>
+          <td>Сфера влияния</td>
+          <td>Всеобъемлющее безразличие ко всем аспектам жизни</td>
+          <td>Тотальный негативный охват, часто с суицидальными мыслями</td>
+          <td>Преимущественно профессиональная сфера</td>
+        </tr>
+        <tr>
+          <td>Физиологические маркеры</td>
+          <td>Вялость, снижение энергии, сонливость</td>
+          <td>Нарушения сна, изменения аппетита, двигательная заторможенность</td>
+          <td>Психосоматические боли, одышка, кожные реакции</td>
+        </tr>
+        <tr>
+          <td>Динамика</td>
+          <td>Может проходить самостоятельно после отдыха или смены обстановки</td>
+          <td>Затяжной характер (месяцы и годы), требует клинического вмешательства</td>
+          <td>Развивается постепенно от гиперответственности к истощению</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ZONES -->
+<section class="section" id="zones">
+  <div class="sec-label">02 · Психология пространства</div>
+  <h2>Расширять или<br>выходить из зоны?</h2>
+  <p style="max-width:600px">Ключевое различие, которое определяет стратегию: расширение — эволюция внутри привычной жизни, выход — качественный прыжок без гарантии возврата.</p>
+
+  <div class="zones-layout">
+    <div class="zone-card reveal" style="border-top:3px solid var(--sage)">
+      <div class="zone-num">01</div>
+      <span class="zone-label" style="background:rgba(107,189,122,0.12); color:var(--sage); border:1px solid rgba(107,189,122,0.3)">Расширение</span>
+      <h3>Освоение нового в рамках привычного</h3>
+      <p>Изучение иностранного языка, начало тренировок, новое хобби. Сопровождается <em>положительными эмоциями</em> и ростом уверенности. Риск минимален, обратный путь открыт.</p>
+      <p style="font-size:0.82rem">Подходит для начала пути: накапливает опыт микро-успехов без перегрузки нервной системы.</p>
+    </div>
+
+    <div class="zone-card reveal" style="border-top:3px solid var(--rust)">
+      <div class="zone-num">02</div>
+      <span class="zone-label" style="background:rgba(224,92,48,0.1); color:var(--rust); border:1px solid rgba(224,92,48,0.25)">Выход · Эволюция</span>
+      <h3>Качественное изменение жизни</h3>
+      <p>Полная смена профессии, переезд в другую страну, разрыв значимых отношений. Сопровождается <em>страхом и неопределённостью</em>. Вернуться к прежнему состоянию невозможно.</p>
+      <p style="font-size:0.82rem">Требует подготовки через расширение. Без базы — риск «зоны паники», где обучение невозможно.</p>
+    </div>
+
+    <div class="zone-card reveal" style="grid-column:1/-1; border-top:3px solid var(--lime)">
+      <div class="zone-num" style="font-size:3rem">ЗОНА ПАНИКИ</div>
+      <span class="zone-label" style="background:rgba(200,245,53,0.15); color:#7a8a1a; border:1px solid rgba(200,245,53,0.4)">Избегать</span>
+      <h3>Резкий рывок без подготовки</h3>
+      <p>Попытка совершить быстрый прыжок без накопленного опыта ведёт к сильнейшему стрессу и откату в ещё более закрытую позицию. Обучение и рост здесь невозможны.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem">
+    <div class="sec-label" style="margin-bottom:1.5rem">4 принципа безопасного выхода</div>
+    <div class="steps-list reveal">
+      <div class="step-row">
+        <div class="step-n">01</div>
+        <div class="step-content">
+          <h3>Постепенность</h3>
+          <p>Шаг за шагом, накапливая опыт успешных микро-изменений. Без крайностей.</p>
+        </div>
+        <span class="step-tag">Обязательно</span>
+      </div>
+      <div class="step-row">
+        <div class="step-n">02</div>
+        <div class="step-content">
+          <h3>Чёткая цель</h3>
+          <p>Выход ради самого выхода редко продуктивен. Понимание «зачем» — обязательно.</p>
+        </div>
+        <span class="step-tag">Обязательно</span>
+      </div>
+      <div class="step-row">
+        <div class="step-n">03</div>
+        <div class="step-content">
+          <h3>Адекватная мотивация</h3>
+          <p>Ответ на вопрос «Зачем?» помогает преодолеть внутреннее сопротивление и лень.</p>
+        </div>
+        <span class="step-tag">Ключевой фактор</span>
+      </div>
+      <div class="step-row">
+        <div class="step-n">04</div>
+        <div class="step-content">
+          <h3>Индивидуальный темп</h3>
+          <p>Гибкость границ обусловлена типом нервной системы, а не возрастом или волей.</p>
+        </div>
+        <span class="step-tag">Учитывать всегда</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODS -->
+<section class="section" id="methods">
+  <div class="sec-label">03 · Методологии изменений</div>
+  <h2>Кайдзен, WOOP<br>и логотерапия</h2>
+
+  <!-- KAIZEN -->
+  <div style="margin-bottom:3.5rem">
+    <h3 style="font-size:1.6rem; margin-bottom:0.5rem">Кайдзен — философия 1%</h3>
+    <p style="max-width:580px">Малые ежедневные изменения на 1% эффективнее разовых революций. Вместо «начать бегать» — «надеть кроссовки и выйти на 5 минут».</p>
+    <div class="kaizen-methods">
+      <div class="kaizen-card reveal">
+        <div class="kc-num">Инструмент 01</div>
+        <div class="kc-title">Система 5S</div>
+        <div class="kc-desc">Сортировка, порядок, чистота, стандартизация, совершенствование. Организация физического пространства снижает когнитивную нагрузку.</div>
+        <span class="kc-result">↓ Стресс</span>
+      </div>
+      <div class="kaizen-card reveal">
+        <div class="kc-num">Инструмент 02</div>
+        <div class="kc-title">Цикл PDCA</div>
+        <div class="kc-desc">Планируй → Делай → Проверяй → Внедряй. Осознанное внедрение привычек с регулярной корректировкой на основе результатов.</div>
+        <span class="kc-result">↑ Осознанность</span>
+      </div>
+      <div class="kaizen-card reveal">
+        <div class="kc-num">Инструмент 03</div>
+        <div class="kc-title">Метод «5 почему»</div>
+        <div class="kc-desc">Последовательное задавание «Почему?» для выявления истинных причин прокрастинации. Находит корень, а не симптомы.</div>
+        <span class="kc-result">↓ Прокрастинация</span>
+      </div>
+      <div class="kaizen-card reveal">
+        <div class="kc-num">Инструмент 04</div>
+        <div class="kc-title">Устранение Муда</div>
+        <div class="kc-desc">Поиск и устранение «потерь» — бесполезных действий (бесконечный скроллинг). Освобождает время и когнитивные ресурсы.</div>
+        <span class="kc-result">↑ Ресурс</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WOOP -->
+  <div style="margin-bottom:3.5rem">
+    <h3 style="font-size:1.6rem; margin-bottom:0.5rem">WOOP — ментальное контрастирование</h3>
+    <p style="max-width:580px">Метод Габриэль Эттинген. Не просто мечта, но и активное представление внутренних препятствий. Автоматизирует реакцию на трудности.</p>
+    <div class="woop-steps reveal">
+      <div class="woop-step">
+        <span class="woop-letter">W</span>
+        <div class="woop-word">Wish · Желание</div>
+        <div class="woop-desc">Конкретное, реалистичное желание на 4 недели. Чёткая формулировка цели.</div>
+      </div>
+      <div class="woop-step">
+        <span class="woop-letter">O</span>
+        <div class="woop-word">Outcome · Результат</div>
+        <div class="woop-desc">Визуализация лучшего возможного результата. Как это изменит жизнь?</div>
+      </div>
+      <div class="woop-step">
+        <span class="woop-letter">O</span>
+        <div class="woop-word">Obstacle · Препятствие</div>
+        <div class="woop-desc">Главное внутреннее препятствие. Не внешнее, а то, что внутри вас.</div>
+      </div>
+      <div class="woop-step">
+        <span class="woop-letter">P</span>
+        <div class="woop-word">Plan · План</div>
+        <div class="woop-desc">«Если препятствие X — то я делаю Y». Автоматизирует реакцию, снимая нагрузку с воли.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGOTHERAPY -->
+  <div>
+    <h3 style="font-size:1.6rem; margin-bottom:0.5rem">Логотерапия Франкла — поиск смысла</h3>
+    <p style="max-width:600px">Стремление к смыслу — фундаментальная мотивационная сила. Апатия часто возникает из «экзистенциального вакуума» — фрустрации этой потребности.</p>
+    <div class="logo-paths">
+      <div class="logo-path reveal">
+        <span class="lp-icon">🔨</span>
+        <div class="lp-title">Творчество и деятельность</div>
+        <div class="lp-desc">Создание чего-то нового или вклад в жизнь общества. Смысл через результат собственного труда.</div>
+      </div>
+      <div class="logo-path reveal">
+        <span class="lp-icon">🌿</span>
+        <div class="lp-title">Переживание ценностей</div>
+        <div class="lp-desc">Созерцание природы, восприятие искусства, любовь к другому человеку. Смысл через глубокое переживание.</div>
+      </div>
+      <div class="logo-path reveal">
+        <span class="lp-icon">⚖️</span>
+        <div class="lp-title">Позиция к страданию</div>
+        <div class="lp-desc">Нахождение смысла в испытаниях, когда ситуацию невозможно изменить. Свобода выбора своего отношения.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IKIGAI -->
+<section class="section" style="border-bottom:1px solid var(--line)">
+  <div class="sec-label">04 · Японская философия</div>
+  <h2>Икигай — то, ради чего<br>стоит просыпаться</h2>
+  <div class="ikigai-wrap">
+    <div class="ikigai-diagram reveal">
+      <div class="ikigai-circles">
+        <div class="ik-circle ik-1"></div>
+        <div class="ik-circle ik-2"></div>
+        <div class="ik-circle ik-3"></div>
+        <div class="ik-circle ik-4"></div>
+        <div class="ik-center">
+          <div class="ik-center-word">Икигай</div>
+          <div class="ik-center-sub">Пересечение 4 сфер</div>
+        </div>
+      </div>
+    </div>
+    <div class="ik-labels reveal">
+      <div class="ik-item">
+        <div class="ik-dot ik-dot-1"></div>
+        <div class="ik-text">
+          <h4>Страсть — что вы любите</h4>
+          <p>То, что вызывает искренний интерес и желание погружаться.</p>
+        </div>
+      </div>
+      <div class="ik-item">
+        <div class="ik-dot ik-dot-2"></div>
+        <div class="ik-text">
+          <h4>Миссия — что нужно миру</h4>
+          <p>Ваш вклад в жизнь других людей и общества.</p>
+        </div>
+      </div>
+      <div class="ik-item">
+        <div class="ik-dot ik-dot-3"></div>
+        <div class="ik-text">
+          <h4>Профессия — в чём вы хороши</h4>
+          <p>Навыки и таланты, которые даются вам лучше, чем другим.</p>
+        </div>
+      </div>
+      <div class="ik-item">
+        <div class="ik-dot ik-dot-4"></div>
+        <div class="ik-text">
+          <h4>Вознаграждение — за что платят</h4>
+          <p>Деятельность, имеющая реальную ценность на рынке труда.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIOLOGY -->
+<section class="section" id="biology">
+  <div class="sec-label">05 · Физиологический фундамент</div>
+  <h2>Энергия, нутриенты<br>и ритм сна</h2>
+  <p style="max-width:600px">Попытки изменить жизнь при низком физическом тонусе обречены. Энергия — главный ресурс, не время. Биологический базис должен быть восстановлен первым.</p>
+
+  <div class="nutr-layout">
+    <div>
+      <div class="sec-label" style="margin-bottom:1rem">Витамин B12 · Источники</div>
+      <div class="nutr-table-wrap reveal">
+        <table class="nutr-table">
+          <thead>
+            <tr>
+              <th>Продукт</th>
+              <th>B12 (мкг/100г)</th>
+              <th>Уровень</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="product">Печень говяжья</td>
+              <td class="value">83.1</td>
+              <td>
+                <div class="b12-bar">
+                  <div class="bar-fill" style="width:100%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="product">Лосось</td>
+              <td class="value">19.0</td>
+              <td>
+                <div class="b12-bar">
+                  <div class="bar-fill" style="width:23%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="product">Говядина</td>
+              <td class="value">2.5</td>
+              <td>
+                <div class="b12-bar">
+                  <div class="bar-fill" style="width:3%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="product">Яйца (желток)</td>
+              <td class="value">1.1–1.2</td>
+              <td>
+                <div class="b12-bar">
+                  <div class="bar-fill" style="width:1.5%"></div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="product">Творог / Панир</td>
+              <td class="value">0.9–1.1</td>
+              <td>
+                <div class="b12-bar">
+                  <div class="bar-fill" style="width:1.3%"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.78rem; margin-top:0.75rem">Для веганов — обогащённые продукты или добавки по назначению врача. Также контролировать D3 и магний.</p>
+    </div>
+
+    <div>
+      <div class="sec-label" style="margin-bottom:1rem">Гигиена сна</div>
+      <div class="sleep-tips">
+        <div class="sleep-tip reveal">
+          <span class="tip-icon">☀️</span>
+          <div class="tip-text">
+            <h4>Утренний свет (10–15 мин)</h4>
+            <p>Синхронизирует циркадные ритмы, запускает правильный гормональный каскад.</p>
+          </div>
+        </div>
+        <div class="sleep-tip reveal">
+          <span class="tip-icon">📵</span>
+          <div class="tip-text">
+            <h4>Ограничение синего света вечером</h4>
+            <p>Способствует выработке мелатонина и естественному засыпанию.</p>
+          </div>
+        </div>
+        <div class="sleep-tip reveal">
+          <span class="tip-icon">🌡️</span>
+          <div class="tip-text">
+            <h4>Температура 18–20°C</h4>
+            <p>Обеспечивает глубокие фазы сна и полноценное восстановление.</p>
+          </div>
+        </div>
+        <div class="sleep-tip reveal">
+          <span class="tip-icon">🧠</span>
+          <div class="tip-text">
+            <h4>CBT-I вместо таблеток</h4>
+            <p>Когнитивно-поведенческая терапия бессонницы без медикаментозной нагрузки.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<!-- WARNING STRIP -->
+<div class="warning-strip">
+  <strong>Важно</strong>
+  Если состояние безразличия длится более двух недель и сопровождается физиологическими нарушениями — первоочерёдна консультация специалиста для исключения клинической депрессии.
+</div>
+
+<!-- CONCLUSION (dark) -->
+<section class="conclusion" id="exit">
+  <div class="wrap">
+    <div class="sec-label">06 · Интегративный подход</div>
+    <h2>Три уровня системы<br>изменений</h2>
+    <p style="color:rgba(242,237,230,0.45); max-width:580px; font-weight:300">Преодоление апатии требует одновременной работы на всех уровнях. Биология без смысла не работает. Смысл без биологии невозможен.</p>
+
+    <div class="conclusion-grid">
+      <div class="con-block reveal">
+        <div class="con-level">Уровень 01</div>
+        <div class="con-title">Биологический</div>
+        <ul class="con-items">
+          <li>Устранить дефициты B12, D3, магния</li>
+          <li>Восстановить режим сна (CBT-I)</li>
+          <li>Регулярная физическая активность</li>
+          <li>Нормализовать циркадные ритмы</li>
+          <li>Отказ от веществ-депрессантов</li>
+        </ul>
+      </div>
+      <div class="con-block reveal">
+        <div class="con-level">Уровень 02</div>
+        <div class="con-title">Психологический</div>
+        <ul class="con-items">
+          <li>Кайдзен — стратегия микро-шагов</li>
+          <li>WOOP — ментальное контрастирование</li>
+          <li>Расширение зоны комфорта постепенно</li>
+          <li>Психотерапия при необходимости</li>
+          <li>Восстановление социальных связей</li>
+        </ul>
+      </div>
+      <div class="con-block reveal">
+        <div class="con-level">Уровень 03</div>
+        <div class="con-title">Экзистенциальный</div>
+        <ul class="con-items">
+          <li>Поиск икигай — точки пересечения 4 сфер</li>
+          <li>Логоанализ жизненного пространства</li>
+          <li>Нахождение смысла в настоящем</li>
+          <li>Практика парадоксальной интенции</li>
+          <li>Доверие к процессу изменений</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="color:rgba(242,237,230,0.35); font-size:0.88rem; margin-top:3rem; font-weight:300; max-width:600px; font-family:'DM Sans',sans-serif">
+      Эволюция личности возможна только при готовности принимать временный дискомфорт как признак роста. Это не кризис — это расширение.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <span>Преодоление Апатии · Система Изменений · 2026</span>
+  <span>31 научный источник · ВОЗ · Клинические институты</span>
+</footer>
+
+<script>
+// ── SCROLL REVEAL ──────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('revealed');
+  });
+}, { threshold: 0.07 });
+
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ── KAIZEN COUNTER ANIMATION ──────────────────────────
+const bigNums = document.querySelectorAll('.stat-big');
+const numIo = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const txt = el.textContent;
+      const num = parseFloat(txt);
+      if (isNaN(num)) return;
+      const suffix = txt.replace(String(num), '');
+      let start = 0;
+      const dur = 1000;
+      const step = dur / 30;
+      const inc = num / 30;
+      const timer = setInterval(() => {
+        start += inc;
+        if (start >= num) { el.textContent = num + suffix; clearInterval(timer); }
+        else el.textContent = (Number.isInteger(num) ? Math.floor(start) : start.toFixed(0)) + suffix;
+      }, step);
+      numIo.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+bigNums.forEach(el => numIo.observe(el));
+
+// ── WOOP HOVER ─────────────────────────────────────────
+document.querySelectorAll('.woop-step').forEach((step, i) => {
+  step.style.transitionDelay = (i * 0.05) + 's';
+});
+</script>
+</body>
+</html>
