@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест на критическое мышление</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .quiz-card {
+            background: white;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .q-block {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+        }
+        .q-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .option:hover {
+            background: #f1f5f9;
+        }
+        .option input {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-card">
+    <h1>Проверка на наличие «серого вещества»</h1>
+    <p class="subtitle">Внимательно читайте вопросы. Логика часто прячется в деталях.</p>
+
+    <form id="brainTest">
+        <div class="q-block">
+            <span class="q-text">1. Сколько месяцев в году имеют 28 дней?</span>
+            <label class="option"><input type="checkbox" name="q1"> Только один (февраль)</label>
+            <label class="option"><input type="checkbox" name="q1"> Все двенадцать</label>
+            <label class="option"><input type="checkbox" name="q1"> Зависит от того, высокосный ли год</label>
+        </div>
+
+        <div class="q-block">
+            <span class="q-text">2. Вы участвуете в марафоне и обогнали бегуна, который шел вторым. Какую позицию вы теперь занимаете?</span>
+            <label class="option"><input type="checkbox" name="q2"> Первую</label>
+            <label class="option"><input type="checkbox" name="q2"> Вторую</label>
+            <label class="option"><input type="checkbox" name="q2"> Третью</label>
+        </div>
+
+        <div class="q-block">
+            <span class="q-text">3. Фермер имел 17 овец. Все, кроме девяти, убежали. Сколько овец осталось у фермера?</span>
+            <label class="option"><input type="checkbox" name="q3"> Восемь</label>
+            <label class="option"><input type="checkbox" name="q3"> Девять</label>
+            <label class="option"><input type="checkbox" name="q3"> Ни одной</label>
+        </div>
+
+        <div class="q-block">
+            <span class="q-text">4. Что можно увидеть один раз в минуте, дважды в моменте и ни разу в тысяче лет?</span>
+            <label class="option"><input type="checkbox" name="q4"> Отражение</label>
+            <label class="option"><input type="checkbox" name="q4"> Букву «М»</label>
+            <label class="option"><input type="checkbox" name="q4"> Смысл жизни</label>
+        </div>
+
+        <button type="button" class="btn" onclick="checkAnswers()">Проверить результат</button>
+    </form>
+</div>
+
+<script>
+    function checkAnswers() {
+        alert("Данные отправлены на сервер. Если вы выбрали 'Вторую' во втором вопросе и 'Девять' в третьем — поздравляем, вы прошли базовую проверку.");
+    }
+</script>
+
+</body>
+</html>
