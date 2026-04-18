@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Нейрофармакология & Когнитивные Функции</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #040810;
+    --bg2: #070d1a;
+    --bg3: #0c1428;
+    --blue: #0a84ff;
+    --cyan: #00e5ff;
+    --teal: #00bcd4;
+    --gold: #ffd166;
+    --text: #c8d8f0;
+    --text-dim: #5a7090;
+    --border: rgba(0,229,255,0.12);
+    --glow: rgba(0,229,255,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NEURAL CANVAS BG */
+  #neural-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(4,8,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--cyan); }
+
+  /* WRAPPER */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 60px;
+  }
+
+  .hero-inner {
+    max-width: 800px;
+    padding: 5rem 0 4rem;
+  }
+
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--cyan);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-label::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 span {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cyan);
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--cyan);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    margin-bottom: 3rem;
+    padding-top: 5rem;
+  }
+
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--cyan);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* THEORY CARDS */
+  .theory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .theory-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .theory-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .theory-card:hover {
+    border-color: rgba(0,229,255,0.3);
+    transform: translateY(-3px);
+  }
+
+  .theory-card:hover::before { opacity: 1; }
+
+  .theory-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .theory-card h3 { margin-bottom: 0.75rem; }
+
+  .theory-card p {
+    font-size: 0.875rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* PEPTIDE TABLE */
+  .peptide-section {
+    margin: 4rem 0;
+  }
+
+  .peptide-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg2);
+  }
+
+  thead tr {
+    background: rgba(0,229,255,0.06);
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover td { background: rgba(0,229,255,0.03); }
+
+  .peptide-name {
+    font-family: 'Space Mono', monospace;
+    color: var(--cyan);
+    font-size: 0.8rem;
+  }
+
+  .effects-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .effect-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 100px;
+    background: rgba(0,229,255,0.07);
+    border: 1px solid rgba(0,229,255,0.15);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  /* 25 DOMAINS */
+  .domains-intro {
+    font-size: 1rem;
+    color: var(--text-dim);
+    max-width: 650px;
+    margin-bottom: 3rem;
+  }
+
+  .domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .domain-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .domain-card:hover {
+    border-color: rgba(0,229,255,0.3);
+    background: var(--bg3);
+    transform: translateY(-2px);
+  }
+
+  .domain-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .domain-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 0.4rem;
+  }
+
+  .domain-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  .domain-body {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+    display: none;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .domain-card.expanded .domain-body { display: block; }
+
+  .domain-supplements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+  }
+
+  .supp-tag {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    background: rgba(255,209,102,0.08);
+    border: 1px solid rgba(255,209,102,0.2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  .domain-expand-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.15);
+    color: var(--cyan);
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .domain-card.expanded .domain-expand-btn {
+    background: rgba(0,229,255,0.15);
+    transform: rotate(45deg);
+  }
+
+  /* PROTOCOL */
+  .protocol-section {
+    margin: 5rem 0;
+  }
+
+  .protocol-layers {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .protocol-layer {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .layer-label-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .layer-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .layer-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .layer-color-bar {
+    width: 32px;
+    height: 3px;
+    border-radius: 100px;
+    margin-top: 0.5rem;
+  }
+
+  .layer-compounds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .compound {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    border: 1px solid;
+    transition: all 0.2s;
+  }
+
+  .compound.basic {
+    background: rgba(0,188,212,0.07);
+    border-color: rgba(0,188,212,0.2);
+    color: var(--teal);
+  }
+
+  .compound.energy {
+    background: rgba(255,209,102,0.07);
+    border-color: rgba(255,209,102,0.2);
+    color: var(--gold);
+  }
+
+  .compound.functional {
+    background: rgba(10,132,255,0.07);
+    border-color: rgba(10,132,255,0.2);
+    color: var(--blue);
+  }
+
+  .compound.neuro {
+    background: rgba(200,100,255,0.07);
+    border-color: rgba(200,100,255,0.2);
+    color: #d07aff;
+  }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    background: rgba(255,209,102,0.05);
+    border: 1px solid rgba(255,209,102,0.15);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    font-size: 0.8rem;
+    color: rgba(255,209,102,0.7);
+    margin: 3rem 0;
+    line-height: 1.6;
+  }
+
+  /* CONCLUSION */
+  .conclusion {
+    padding: 4rem 0 6rem;
+  }
+
+  .conclusion-text {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--text-dim);
+    max-width: 700px;
+    margin-bottom: 1.5rem;
+  }
+
+  .conclusion-highlight {
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.5;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.2); border-radius: 3px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: fadeInUp 0.7s ease both;
+  }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.35s; }
+  .delay-4 { animation-delay: 0.5s; }
+
+  /* Glow pulse on hero */
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 20%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+    animation: glowPulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @media (max-width: 700px) {
+    .protocol-layer { grid-template-columns: 1fr; }
+    .hero-stats { gap: 2rem; flex-wrap: wrap; }
+    .nav-links { display: none; }
+    .domains-grid { grid-template-columns: 1fr; }
+    .theory-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="neural-bg"></canvas>
+
+<nav>
+  <div class="nav-logo">Нейрофармакология // Когнитивный Атлас</div>
+  <ul class="nav-links">
+    <li><a href="#theory">Теория</a></li>
+    <li><a href="#peptides">Пептиды</a></li>
+    <li><a href="#domains">25 доменов</a></li>
+    <li><a href="#protocol">Протокол</a></li>
+  </ul>
+</nav>
+
+<div class="wrapper">
+
+  <!-- HERO -->
+  <section class="hero" style="position:relative">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div class="hero-label animate-in">Аналитический отчёт · Нейрофармакология</div>
+      <h1 class="animate-in delay-1">
+        Когнитивные<br>функции: <span>БАДы,</span><br>витамины, ноотропы
+      </h1>
+      <p class="hero-desc animate-in delay-2">
+        Углублённый анализ средств, воздействующих на 25 специфических когнитивных доменов — от метакогниции до рефлексии. Механизмы, доказательная база и стратегии оптимизации.
+      </p>
+      <div class="hero-stats animate-in delay-3">
+        <div class="stat">
+          <div class="stat-num">25</div>
+          <div class="stat-label">когнитивных<br>доменов</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">39</div>
+          <div class="stat-label">источников<br>и исследований</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">5</div>
+          <div class="stat-label">ключевых<br>пептидов</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- THEORY -->
+  <section id="theory">
+    <div class="section-header">
+      <div class="section-tag">01 · Теоретические основы</div>
+      <h2>Модуляция когнитивных систем</h2>
+    </div>
+    <div class="theory-grid">
+      <div class="theory-card">
+        <div class="theory-icon">🧠</div>
+        <h3>Холинергическая система</h3>
+        <p>Ацетилхолин — ключевой медиатор обучения и внимания. Цитиколин и Альфа-GPC повышают его доступность и способствуют синтезу фосфатидилхолина для восстановления клеточных мембран.</p>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">⚡</div>
+        <h3>Дофаминергическая регуляция</h3>
+        <p>Дофамин и норадреналин определяют мотивацию, рабочую память и когнитивный контроль. L-тирозин — прекурсор этих катехоламинов, предотвращающий «провалы» при стрессе.</p>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🔬</div>
+        <h3>Пептидная фармакология</h3>
+        <p>Пептиды — новый класс молекул с высокой специфичностью. Они запускают каскады нейропластичности без побочных эффектов, характерных для традиционных стимуляторов.</p>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🌱</div>
+        <h3>BDNF и нейротрофины</h3>
+        <p>Нейротрофический фактор мозга (BDNF) и NGF — ключевые мишени когнитивной оптимизации. Физическая активность — лучший способ их естественного повышения.</p>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">⚙️</div>
+        <h3>Энергетический метаболизм</h3>
+        <p>Митохондриальная эффективность нейронов лежит в основе устойчивого когнитивного контроля. Креатин, ALCAR и CoQ10 оптимизируют производство АТФ в нейронах.</p>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🔗</div>
+        <h3>Синаптическая пластичность</h3>
+        <p>Физическая перестройка синапсов — базис обучения. Дигекса стимулирует рост дендритов на уровнях, превосходящих активность BDNF в экспериментальных моделях.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" style="margin-top:3rem"></div>
+
+  <!-- PEPTIDES -->
+  <section id="peptides">
+    <div class="section-header">
+      <div class="section-tag">02 · Пептидная фармакология</div>
+      <h2>Ключевые нейропептиды</h2>
+    </div>
+    <div class="peptide-section">
+      <div class="peptide-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Пептид</th>
+              <th>Аминокислоты</th>
+              <th>T½</th>
+              <th>Когнитивные эффекты</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="peptide-name">Семакс</span></td>
+              <td>7</td>
+              <td>20–30 мин</td>
+              <td>
+                <div class="effects-list">
+                  <span class="effect-tag">Концентрация</span>
+                  <span class="effect-tag">Память</span>
+                  <span class="effect-tag">Нейропластичность</span>
+                  <span class="effect-tag">↑ BDNF</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="peptide-name">Селанк</span></td>
+              <td>7</td>
+              <td>5–6 часов</td>
+              <td>
+                <div class="effects-list">
+                  <span class="effect-tag">Анксиолиз</span>
+                  <span class="effect-tag">Обучение</span>
+                  <span class="effect-tag">Стабилизация настроения</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="peptide-name">Дигекса</span></td>
+              <td>6</td>
+              <td>Вариативно</td>
+              <td>
+                <div class="effects-list">
+                  <span class="effect-tag">Синаптогенез</span>
+                  <span class="effect-tag">Сложные задачи</span>
+                  <span class="effect-tag">Рост дендритов</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="peptide-name">P-21</span></td>
+              <td>21</td>
+              <td>20–60 мин</td>
+              <td>
+                <div class="effects-list">
+                  <span class="effect-tag">Нейрогенез</span>
+                  <span class="effect-tag">Защита от амилоида</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="peptide-name">Церебролизин</span></td>
+              <td>5 (осн.)</td>
+              <td>2 часа</td>
+              <td>
+                <div class="effects-list">
+                  <span class="effect-tag">Нейрорепарация</span>
+                  <span class="effect-tag">Скорость обработки</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 25 DOMAINS -->
+  <section id="domains">
+    <div class="section-header">
+      <div class="section-tag">03 · Когнитивные домены</div>
+      <h2>25 когнитивных функций</h2>
+    </div>
+    <p class="domains-intro">Нажмите на карточку, чтобы раскрыть механизм действия и ключевые средства оптимизации для каждого когнитивного домена.</p>
+    <div class="domains-grid" id="domains-grid">
+    </div>
+  </section>
+
+  <div class="divider" style="margin-top:4rem"></div>
+
+  <!-- PROTOCOL -->
+  <section id="protocol" class="protocol-section">
+    <div class="section-header" style="padding-top:3rem">
+      <div class="section-tag">04 · Профессиональный протокол</div>
+      <h2>Стек когнитивной оптимизации</h2>
+    </div>
+    <div class="protocol-layers">
+
+      <div class="protocol-layer">
+        <div class="layer-label-wrap">
+          <div class="layer-num">Слой 01</div>
+          <div class="layer-title">Базовый</div>
+          <div class="layer-color-bar" style="background: var(--teal)"></div>
+        </div>
+        <div class="layer-compounds">
+          <span class="compound basic">🧪 Мультивитамины</span>
+          <span class="compound basic">🐟 Омега-3 (2 г)</span>
+          <span class="compound basic">☀️ Витамин D (2000 МЕ)</span>
+          <span class="compound basic">🧲 Магний L-треонат</span>
+        </div>
+      </div>
+
+      <div class="protocol-layer">
+        <div class="layer-label-wrap">
+          <div class="layer-num">Слой 02</div>
+          <div class="layer-title">Энергетический</div>
+          <div class="layer-color-bar" style="background: var(--gold)"></div>
+        </div>
+        <div class="layer-compounds">
+          <span class="compound energy">⚡ Креатин (5 г)</span>
+          <span class="compound energy">🔋 CoQ10</span>
+          <span class="compound energy">🏃 ALCAR</span>
+        </div>
+      </div>
+
+      <div class="protocol-layer">
+        <div class="layer-label-wrap">
+          <div class="layer-num">Слой 03</div>
+          <div class="layer-title">Функциональный</div>
+          <div class="layer-color-bar" style="background: var(--blue)"></div>
+        </div>
+        <div class="layer-compounds">
+          <span class="compound functional">🎯 Родиола + Кофеин + Теанин</span>
+          <span class="compound functional">📚 Бакопа + Ежовик + Цитиколин</span>
+          <span class="compound functional">🛡️ Ашваганда + Селанк</span>
+        </div>
+      </div>
+
+      <div class="protocol-layer">
+        <div class="layer-label-wrap">
+          <div class="layer-num">Слой 04</div>
+          <div class="layer-title">Нейропластичность</div>
+          <div class="layer-color-bar" style="background: #d07aff"></div>
+        </div>
+        <div class="layer-compounds">
+          <span class="compound neuro">🧬 Семакс (курс)</span>
+          <span class="compound neuro">🔬 Дигекса (курс)</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    ⚠️ Данный отчёт предназначен исключительно для ознакомительных целей и не является медицинской рекомендацией. Перед приёмом любых препаратов и добавок необходимо проконсультироваться с квалифицированным специалистом.
+  </div>
+
+  <!-- CONCLUSION -->
+  <section class="conclusion">
+    <div class="section-tag">05 · Заключение</div>
+    <p class="conclusion-text" style="margin-top:1rem">
+      Развитие нейрофармакологии движется в сторону <span class="conclusion-highlight">персонализированных протоколов</span>, основанных на генетическом тестировании и биомаркерах. Пептиды, такие как Дигекса и P-21, открывают возможности для физического улучшения мозга через направленный синаптогенез.
+    </p>
+    <p class="conclusion-text">
+      Однако фундаментальной основой остаются <span class="conclusion-highlight">здоровый сон, физическая активность и сбалансированное питание</span>. Когнитивная оптимизация — это не поиск «волшебной таблетки», а системная работа над биологической базой мозга.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+  <footer>
+    <span>Нейрофармакология & Когнитивные Функции · 2026</span>
+    <span>39 научных источников</span>
+  </footer>
+
+</div>
+
+<script>
+// ─── NEURAL NETWORK BACKGROUND ───────────────────────────
+const canvas = document.getElementById('neural-bg');
+const ctx = canvas.getContext('2d');
+
+let W, H, nodes = [], edges = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initNodes() {
+  nodes = [];
+  const count = Math.floor(W * H / 22000);
+  for (let i = 0; i < count; i++) {
+    nodes.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.5 + 0.5
+    });
+  }
+}
+
+function drawNeural() {
+  ctx.clearRect(0, 0, W, H);
+  const maxDist = 150;
+
+  // Edges
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < maxDist) {
+        const alpha = (1 - dist / maxDist) * 0.4;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.strokeStyle = `rgba(0,229,255,${alpha})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Nodes
+  nodes.forEach(n => {
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,229,255,0.7)';
+    ctx.fill();
+
+    n.x += n.vx;
+    n.y += n.vy;
+    if (n.x < 0 || n.x > W) n.vx *= -1;
+    if (n.y < 0 || n.y > H) n.vy *= -1;
+  });
+
+  requestAnimationFrame(drawNeural);
+}
+
+resize();
+initNodes();
+drawNeural();
+window.addEventListener('resize', () => { resize(); initNodes(); });
+
+
+// ─── 25 DOMAINS DATA ────────────────────────────────────
+const domains = [
+  {
+    num: '01', title: 'Метакогниция',
+    sub: 'Осознание и контроль мышления',
+    body: 'Требует высокой интеграции работы префронтальной коры. Цитиколин повышает энергетический потенциал нейронов фронтальных долей, улучшая мониторинг когнитивных стратегий.',
+    supps: ['Цитиколин', 'Семакс', 'Альфа-GPC']
+  },
+  {
+    num: '02', title: 'Исполнительные функции',
+    sub: 'Управление вниманием и памятью',
+    body: 'Опирается на баланс дофамина и норадреналина. L-тирозин фундаментален для поддержания исполнительных функций в условиях многозадачности.',
+    supps: ['L-тирозин', 'Бакопа Монье', 'Цитиколин']
+  },
+  {
+    num: '03', title: 'Когнитивная гибкость',
+    sub: 'Переключение и поиск возможностей',
+    body: 'Способность мозга быстро менять стратегии. Тирозин предотвращает когнитивную ригидность при стрессе. Дигекса стимулирует синаптогенез, создавая базу для новых ассоциативных связей.',
+    supps: ['L-тирозин', 'Дигекса', 'Родиола']
+  },
+  {
+    num: '04', title: 'Ситуативная осведомлённость',
+    sub: 'Мониторинг внешней среды',
+    body: 'Зависит от скорости обработки сенсорных данных. Модафинил повышает точность мониторинга факторов среды в реальном времени. Лютеин увеличивает скорость нейронного отклика на визуальные стимулы.',
+    supps: ['Кофеин', 'Модафинил', 'Лютеин', 'Зеаксантин']
+  },
+  {
+    num: '05', title: 'Рабочая память',
+    sub: 'Объём оперативного удержания данных',
+    body: '«Узкое место» когнитивной системы. Магний L-треонат проникает через гематоэнцефалический барьер и повышает плотность синапсов. Креатин обеспечивает энергией (АТФ) процессы удержания данных.',
+    supps: ['Креатин', 'Магний L-треонат', 'Куркумин']
+  },
+  {
+    num: '06', title: 'Селективное внимание',
+    sub: 'Фильтрация шума',
+    body: 'L-теанин + кофеин — «золотой стандарт»: теанин обеспечивает альфа-волновую активность, кофеин поддерживает общую активацию. Омега-3 (ДГК) необходимы для структурной целостности нейронных сетей.',
+    supps: ['L-теанин', 'Кофеин', 'Омега-3 (ДГК)']
+  },
+  {
+    num: '07', title: 'Прогностическая модель',
+    sub: 'Предсказание событий',
+    body: 'Опирается на общую связность мозга. Растительные ноотропные комплексы повышают когерентность нейронных сетей. Гуперзин А поддерживает паттерны активации для долгосрочного прогнозирования.',
+    supps: ['Гуперзин А', 'Растительные комплексы']
+  },
+  {
+    num: '08', title: 'Когнитивный контроль',
+    sub: 'Волевое управление ресурсами',
+    body: 'Требует стабильного энергетического обеспечения префронтальной коры. Цитиколин и ALCAR повышают митохондриальную эффективность нейронов. Витамины B6, B9, B12 необходимы для синтеза нейромедиаторов.',
+    supps: ['Цитиколин', 'ALCAR', 'Вит. B6/B9/B12']
+  },
+  {
+    num: '09', title: 'Нейропластичность',
+    sub: 'База для обучения и адаптации',
+    body: 'Ежовик гребенчатый стимулирует синтез NGF, способствуя росту аксонов и миелинизации. Пептиды P-21 и FGL напрямую запускают нейрогенез и укрепление синапсов.',
+    supps: ['Ежовик гребенчатый', 'P-21', 'FGL', 'Maritime Pine Bark']
+  },
+  {
+    num: '10', title: 'Эмоциональный интеллект',
+    sub: 'Учёт психоэмоциональных факторов',
+    body: 'Требует баланса логики и эмоционального отклика. Селанк стабилизирует эмоциональный фон без подавления когнитивной активности. Пробиотики через ось «кишечник-мозг» влияют на BDNF.',
+    supps: ['Селанк', 'Пробиотики (L. plantarum)']
+  },
+  {
+    num: '11', title: 'Системное мышление',
+    sub: 'Видение взаимосвязей',
+    body: 'Требует одновременного удержания множества элементов и связей. Фосфатидилсерин и Бакопа Монье поддерживают целостность мембран. Дигекса позволяет строить более сложные иерархические модели реальности.',
+    supps: ['Фосфатидилсерин', 'Бакопа Монье', 'Дигекса']
+  },
+  {
+    num: '12', title: 'Флюидный интеллект',
+    sub: 'Решение новых задач',
+    body: 'Тесно связан с рабочей памятью и скоростью обработки. Магний L-треонат и Креатин улучшают показатели логического мышления без опоры на прошлый опыт.',
+    supps: ['Магний L-треонат', 'Креатин', 'Мультивитамины']
+  },
+  {
+    num: '13', title: 'Концентрация внимания',
+    sub: 'Длительное удержание фокуса',
+    body: 'Критически важна устойчивость к утомлению. Родиола розовая и Женьшень поддерживают работоспособность при высоких нагрузках. Масло мяты перечной быстро снижает ментальную усталость.',
+    supps: ['Родиола розовая', 'Женьшень', 'Мята перечная']
+  },
+  {
+    num: '14', title: 'Скорость обработки',
+    sub: 'Темп отклика',
+    body: 'Определяется эффективностью миелинизации и синаптической передачи. Бакопа и Церебролизин ускоряют обработку стимулов. Цитиколин повышает скорость принятия решений.',
+    supps: ['Бакопа Монье', 'Церебролизин', 'Лютеин', 'Цитиколин']
+  },
+  {
+    num: '15', title: 'Ментальная репрезентация',
+    sub: 'Создание внутренних карт',
+    body: 'FGL способствует развитию нейронов и формированию нейронных карт для сложного моделирования. Фосфатидилхолин обеспечивает строительный материал для поддержания архитектуры репрезентаций.',
+    supps: ['FGL', 'Фосфатидилхолин']
+  },
+  {
+    num: '16', title: 'Дивергентное мышление',
+    sub: 'Поиск множества решений',
+    body: 'Ассоциируется с состоянием «расслабленного бодрствования». L-теанин, стимулируя альфа-волны, создаёт идеальные условия для генерации новых идей.',
+    supps: ['L-теанин']
+  },
+  {
+    num: '17', title: 'Стратегическое планирование',
+    sub: 'Долгосрочные цели',
+    body: 'Требует исполнительных функций высшего порядка. Сочетание Семакса и Дигексы обеспечивает базу для долгосрочного прогнозирования. Тирозин поддерживает мотивацию для следования долгосрочным планам.',
+    supps: ['Семакс', 'Дигекса', 'L-тирозин']
+  },
+  {
+    num: '18', title: 'Помехоустойчивость',
+    sub: 'Работа в условиях стресса',
+    body: 'Родиола розовая повышает порог чувствительности к стрессорам. Тирозин защищает рабочую память от деградации при шуме и холоде. Селанк предотвращает развитие тревожных реакций.',
+    supps: ['Родиола розовая', 'L-тирозин', 'Селанк']
+  },
+  {
+    num: '19', title: 'Адаптивный интеллект',
+    sub: 'Подстройка под среду',
+    body: 'Требует высокой скорости переобучения. Дигекса и BPC-157 ускоряют адаптацию к новым правилам. Омега-3 повышают текучесть клеточных мембран, облегчая адаптационные процессы.',
+    supps: ['Дигекса', 'BPC-157', 'Омега-3']
+  },
+  {
+    num: '20', title: 'Когнитивный резерв',
+    sub: 'Запас прочности',
+    body: 'Формируется годами и защищает от деменции. Омега-3, Витамин D и антиоксиданты замедляют старение мозга. Мультивитамины (исследование COSMOS) замедляют когнитивное старение до двух лет.',
+    supps: ['Омега-3', 'Витамин D', 'Ресвератрол', 'Куркумин']
+  },
+  {
+    num: '21', title: 'Интуиция',
+    sub: 'Распознавание паттернов',
+    body: 'Мгновенная обработка данных на подсознательном уровне. Холинергические средства ускоряют доступ к накопленным паттернам памяти. Селанк помогает «слышать» интуитивные сигналы, убирая эмоциональный шум.',
+    supps: ['Альфа-GPC', 'Цитиколин', 'Селанк']
+  },
+  {
+    num: '22', title: 'Абстрактное мышление',
+    sub: 'Работа с концепциями',
+    body: 'Требует высокой сетевой интеграции. Магний L-треонат поддерживает синаптическую пластичность для оперирования нематериальными концепциями.',
+    supps: ['Магний L-треонат', 'Растительные ноотропы']
+  },
+  {
+    num: '23', title: 'Мнемоника',
+    sub: 'Архивация данных',
+    body: 'Требует эффективной работы гиппокампа. Бакопа Монье и Ежовик гребенчатый — лучшие средства для долгосрочного укрепления памяти. Фосфатидилсерин способствует быстрому извлечению информации.',
+    supps: ['Бакопа Монье', 'Ежовик гребенчатый', 'Фосфатидилсерин']
+  },
+  {
+    num: '24', title: 'Критическое мышление',
+    sub: 'Оценка и анализ',
+    body: 'Стек «Цитиколин + Бакопа + Омега-3» создаёт условия для долгосрочного улучшения аналитических способностей и защиты нейронов.',
+    supps: ['Цитиколин', 'Бакопа', 'Омега-3']
+  },
+  {
+    num: '25', title: 'Рефлексия',
+    sub: 'Самооценка и коррекция',
+    body: 'Завершает когнитивный цикл. Основа — сбалансированная холинергическая система и снятие тревожности. Интеграция когнитивного и эмоционального опыта.',
+    supps: ['Цитиколин', 'Селанк', 'Бакопа']
+  }
+];
+
+const grid = document.getElementById('domains-grid');
+
+domains.forEach(d => {
+  const card = document.createElement('div');
+  card.className = 'domain-card';
+  card.innerHTML = `
+    <div class="domain-expand-btn">+</div>
+    <div class="domain-num">ДОМЕН ${d.num}</div>
+    <div class="domain-title">${d.title}</div>
+    <div class="domain-subtitle">${d.sub}</div>
+    <div class="domain-body">
+      <p>${d.body}</p>
+      <div class="domain-supplements">
+        ${d.supps.map(s => `<span class="supp-tag">${s}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  card.addEventListener('click', () => {
+    card.classList.toggle('expanded');
+  });
+  grid.appendChild(card);
+});
+
+
+// ─── INTERSECTION OBSERVER for animate-in ───────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.theory-card, .domain-card, .protocol-layer').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

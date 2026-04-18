@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гормоны страха — Нейроэндокринная регуляция</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0d0705;
+  --bg2:     #130a08;
+  --bg3:     #1c0f0c;
+  --red:     #e84040;
+  --amber:   #f0962a;
+  --gold:    #e8c76a;
+  --warm:    #d4a57a;
+  --text:    #d8c4b8;
+  --dim:     #6b4e42;
+  --border:  rgba(232,64,64,0.12);
+  --glow-r:  rgba(232,64,64,0.07);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 17px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* ── PULSE CANVAS ── */
+#pulse-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: 56px;
+  background: rgba(13,7,5,0.9);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+}
+
+.nav-brand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--amber); }
+
+/* ── WRAPPER ── */
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 56px;
+  position: relative;
+}
+
+.hero-content { padding: 5rem 0 4rem; max-width: 820px; }
+
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-eyebrow::after {
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 1px;
+  background: var(--red);
+  opacity: 0.5;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: #fff;
+  margin-bottom: 1.75rem;
+}
+h1 em {
+  font-style: italic;
+  color: var(--red);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--dim);
+  max-width: 580px;
+  font-weight: 300;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+}
+
+.hero-metrics {
+  display: flex;
+  gap: 3.5rem;
+  flex-wrap: wrap;
+}
+.metric { display: flex; flex-direction: column; gap: 0.25rem; }
+.metric-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--amber);
+  line-height: 1;
+}
+.metric-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* Ambient glow */
+.hero-orb {
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(232,64,64,0.08), transparent 65%);
+  pointer-events: none;
+}
+
+/* ── DIVIDER ── */
+.rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* ── SECTION ── */
+.section { padding: 5rem 0; }
+
+.sec-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 2rem;
+}
+
+h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+p { color: var(--text); margin-bottom: 1rem; }
+p:last-child { margin-bottom: 0; }
+
+/* ── PATHWAY DIAGRAM ── */
+.pathway {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 3rem 0;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+.path-step {
+  flex: 1;
+  min-width: 140px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  position: relative;
+  transition: border-color .3s, transform .3s;
+}
+.path-step:hover {
+  border-color: rgba(232,64,64,0.35);
+  transform: translateY(-3px);
+}
+.path-step + .path-step { margin-left: 2.5rem; }
+.path-step + .path-step::before {
+  content: '→';
+  position: absolute;
+  left: -1.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--red);
+  font-size: 1.1rem;
+  font-family: monospace;
+}
+.path-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+.path-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.path-desc {
+  font-size: 0.78rem;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+/* ── HORMONE CARDS ── */
+.hormone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.hormone-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.6rem;
+  position: relative;
+  overflow: hidden;
+  transition: all .25s;
+}
+.hormone-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red), var(--amber));
+  opacity: 0;
+  transition: opacity .3s;
+}
+.hormone-card:hover {
+  border-color: rgba(240,150,42,0.3);
+  transform: translateY(-3px);
+}
+.hormone-card:hover::after { opacity: 1; }
+
+.hc-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+}
+.hc-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+.hc-alt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--amber);
+  margin-bottom: 1rem;
+}
+.hc-source {
+  font-size: 0.82rem;
+  color: var(--dim);
+  margin-bottom: 0.75rem;
+}
+.hc-role {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+.hc-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 100px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  margin-top: 1rem;
+}
+.badge-threat {
+  background: rgba(232,64,64,0.1);
+  border: 1px solid rgba(232,64,64,0.25);
+  color: var(--red);
+}
+.badge-calm {
+  background: rgba(104,180,104,0.1);
+  border: 1px solid rgba(104,180,104,0.25);
+  color: #6db56d;
+}
+
+/* ── BETA BLOCKERS ── */
+.bb-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+.bb-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+}
+.bb-panel h3 { font-size: 1rem; margin-bottom: 1rem; }
+.bb-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+.bb-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+.bb-list li::before {
+  content: '▸';
+  color: var(--amber);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.risk-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+.risk-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+.risk-list li::before {
+  content: '⚠';
+  color: var(--red);
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  margin-top: 0.15rem;
+}
+
+/* ── ANTAGONISTS ── */
+.antag-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+.antag-card {
+  background: var(--bg2);
+  border: 1px solid rgba(104,180,104,0.15);
+  border-radius: 12px;
+  padding: 1.75rem;
+  transition: border-color .3s;
+}
+.antag-card:hover { border-color: rgba(104,180,104,0.35); }
+.antag-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+.antag-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6db56d;
+  margin-bottom: 1.25rem;
+}
+.antag-mechanisms {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.mech {
+  padding: 0.75rem 1rem;
+  background: rgba(104,180,104,0.05);
+  border: 1px solid rgba(104,180,104,0.1);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+.mech strong {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6db56d;
+  margin-bottom: 0.3rem;
+}
+
+/* ── NUTRIENTS TABLE ── */
+.nutr-table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin-top: 2.5rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg2);
+}
+thead tr {
+  background: rgba(232,64,64,0.05);
+  border-bottom: 1px solid var(--border);
+}
+th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--amber);
+  padding: 1rem 1.5rem;
+  text-align: left;
+  white-space: nowrap;
+}
+td {
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(232,64,64,0.03); }
+.nutr-name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1rem;
+}
+
+/* ── CIRCADIAN RHYTHM ── */
+.circadian {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-top: 2.5rem;
+}
+.circadian-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1.75rem;
+  text-align: center;
+}
+.clock-bar {
+  position: relative;
+  height: 64px;
+  margin-bottom: 1rem;
+}
+.clock-track {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  height: 6px;
+  transform: translateY(-50%);
+  border-radius: 100px;
+  background: rgba(255,255,255,0.06);
+}
+.cortisol-bar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 55%;
+  height: 20px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, var(--red), rgba(232,64,64,0.1));
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+.melatonin-bar {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 50%;
+  height: 20px;
+  transform: translateY(-50%);
+  background: linear-gradient(270deg, #7b68ee, rgba(123,104,238,0.1));
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1rem;
+}
+.bar-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+.clock-times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+.clock-times span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--dim);
+}
+.circadian-note {
+  margin-top: 1.5rem;
+  font-size: 0.88rem;
+  color: var(--dim);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── FUTURE DRUGS ── */
+.future-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+.future-card {
+  background: var(--bg2);
+  border: 1px solid rgba(232,200,106,0.12);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all .25s;
+}
+.future-card:hover {
+  border-color: rgba(232,200,106,0.3);
+  transform: translateY(-3px);
+}
+.future-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  opacity: 0.6;
+}
+.future-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.future-mech {
+  font-size: 0.8rem;
+  color: var(--dim);
+  line-height: 1.6;
+}
+.future-tag {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  background: rgba(232,200,106,0.08);
+  border: 1px solid rgba(232,200,106,0.2);
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+
+/* ── STRATEGY ── */
+.strategy-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+.strat-step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all .25s;
+}
+.strat-step:hover { border-color: rgba(240,150,42,0.2); }
+.strat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: rgba(240,150,42,0.2);
+  line-height: 1;
+  text-align: right;
+}
+.strat-content h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+.strat-content p { font-size: 0.88rem; color: var(--dim); line-height: 1.6; }
+
+/* ── WARNING BOX ── */
+.warning-box {
+  background: rgba(232,64,64,0.05);
+  border: 1px solid rgba(232,64,64,0.2);
+  border-left: 3px solid var(--red);
+  border-radius: 0 10px 10px 0;
+  padding: 1.25rem 1.5rem;
+  margin: 2.5rem 0;
+  font-size: 0.88rem;
+  color: rgba(216,196,184,0.7);
+  line-height: 1.65;
+}
+.warning-box strong { color: var(--red); }
+
+/* ── CONCLUSION ── */
+.conclusion {
+  padding: 4rem 0 6rem;
+}
+.conclusion-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+  border-left: 3px solid var(--red);
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 1.75rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  opacity: 0.5;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim { animation: fadeSlide 0.7s ease both; }
+.d1 { animation-delay: 0.1s; }
+.d2 { animation-delay: 0.25s; }
+.d3 { animation-delay: 0.4s; }
+.d4 { animation-delay: 0.55s; }
+
+@keyframes beat {
+  0%, 100% { transform: scaleX(1); }
+  50%       { transform: scaleX(1.02); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .bb-layout, .antag-grid { grid-template-columns: 1fr; }
+  .pathway { flex-direction: column; }
+  .path-step + .path-step { margin-left: 0; margin-top: 2.5rem; }
+  .path-step + .path-step::before { content: '↓'; left: 50%; top: -1.8rem; transform: translateX(-50%); }
+  .nav-links { display: none; }
+  .hero-metrics { gap: 2rem; }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(232,64,64,0.25); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<canvas id="pulse-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Нейроэндокринология страха</div>
+  <ul class="nav-links">
+    <li><a href="#physiology">Физиология</a></li>
+    <li><a href="#hormones">Гормоны</a></li>
+    <li><a href="#antagonists">Антагонисты</a></li>
+    <li><a href="#nutrients">Нутриенты</a></li>
+    <li><a href="#future">2026</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow anim">Нейроэндокринная регуляция</div>
+    <h1 class="anim d1">
+      Гормоны <em>страха</em>:<br>как ими управлять
+    </h1>
+    <p class="hero-sub anim d2">
+      Детальный анализ физиологии реакции на угрозу — от амигдалы до надпочечников. Механизмы блокирования, природные антагонисты и стратегия достижения гормонального гомеостаза.
+    </p>
+    <div class="hero-metrics anim d3">
+      <div class="metric">
+        <span class="metric-val">2</span>
+        <span class="metric-lbl">ключевые<br>системы страха</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">5</span>
+        <span class="metric-lbl">гормонов<br>задействовано</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">4</span>
+        <span class="metric-lbl">стратегии<br>коррекции</span>
+      </div>
+      <div class="metric">
+        <span class="metric-val">60</span>
+        <span class="metric-lbl">источников<br>и исследований</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- PHYSIOLOGY -->
+<section class="section" id="physiology">
+  <div class="sec-tag">01 · Физиология</div>
+  <h2>Два пути реакции на угрозу</h2>
+  <p style="max-width:680px; color:var(--dim)">Страх запускает строго последовательный каскад. Таламус оценивает угрозу и активирует две параллельные системы — немедленную и долгосрочную.</p>
+
+  <div class="pathway">
+    <div class="path-step">
+      <span class="path-icon">👁</span>
+      <div class="path-name">Сенсорный сигнал</div>
+      <div class="path-desc">Зрение, слух, запах — сигнал угрозы попадает в таламус</div>
+    </div>
+    <div class="path-step">
+      <span class="path-icon">🔱</span>
+      <div class="path-name">Амигдала</div>
+      <div class="path-desc">Оценка угрозы, запуск эмоциональной памяти страха</div>
+    </div>
+    <div class="path-step">
+      <span class="path-icon">⚙️</span>
+      <div class="path-name">Гипоталамус</div>
+      <div class="path-desc">Командный центр: активирует САМ и ГГН-ось параллельно</div>
+    </div>
+    <div class="path-step">
+      <span class="path-icon">⚡</span>
+      <div class="path-name">САМ-система</div>
+      <div class="path-desc">Адреналин + норадреналин через 0,1 сек: «бей или беги»</div>
+    </div>
+    <div class="path-step">
+      <span class="path-icon">⏳</span>
+      <div class="path-name">ГГН-ось</div>
+      <div class="path-desc">CRH → ACTH → кортизол: поддержание готовности часами</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1rem">
+    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.5rem">
+      <div class="sec-tag" style="margin-bottom:0.75rem">САМ-система · Мгновенная</div>
+      <h3 style="font-size:1rem; margin-bottom:0.75rem">Симпато-адренало-медуллярная ось</h3>
+      <p style="font-size:0.88rem; color:var(--dim)">Срабатывает за доли секунды. Нервные импульсы от гипоталамуса напрямую достигают мозгового вещества надпочечников и вызывают выброс катехоламинов в кровоток — без гормональных промежуточных звеньев.</p>
+    </div>
+    <div style="background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:1.5rem">
+      <div class="sec-tag" style="margin-bottom:0.75rem">ГГН-ось · Долгосрочная</div>
+      <h3 style="font-size:1rem; margin-bottom:0.75rem">Гипоталамо-гипофизарно-надпочечниковая ось</h3>
+      <p style="font-size:0.88rem; color:var(--dim)">Включается через несколько минут. Работает по принципу отрицательной обратной связи. При хроническом страхе эта обратная связь ломается — организм застревает в режиме «холостого хода на высоких оборотах».</p>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- HORMONES -->
+<section class="section" id="hormones">
+  <div class="sec-tag">02 · Гормоны страха</div>
+  <h2>Химические мессенджеры угрозы</h2>
+  <p style="max-width:640px; color:var(--dim)">Пять ключевых молекул, координирующих физиологический ответ на опасность — от мгновенного выброса до многочасовой поддержки готовности.</p>
+
+  <div class="hormone-grid">
+    <div class="hormone-card">
+      <div class="hc-type">Катехоламин</div>
+      <div class="hc-name">Адреналин</div>
+      <div class="hc-alt">Эпинефрин</div>
+      <div class="hc-source">📍 Мозговое вещество надпочечников</div>
+      <div class="hc-role">Главный медиатор «бей или беги». Увеличивает ЧСС и АД, расширяет бронхи, высвобождает глюкозу и жирные кислоты. Расширяет зрачки и обостряет все чувства.</div>
+      <span class="hc-badge badge-threat">Гормон страха · Мгновенный</span>
+    </div>
+
+    <div class="hormone-card">
+      <div class="hc-type">Катехоламин</div>
+      <div class="hc-name">Норадреналин</div>
+      <div class="hc-alt">Норэпинефрин</div>
+      <div class="hc-source">📍 Надпочечники + нейроны ствола мозга</div>
+      <div class="hc-role">«Гормон ярости» — предшественник адреналина. Вызывает агрессивную готовность вместо желания бежать. Работает синергично с адреналином, усиливая интенсивность физической реакции.</div>
+      <span class="hc-badge badge-threat">Гормон атаки · Мгновенный</span>
+    </div>
+
+    <div class="hormone-card">
+      <div class="hc-type">Глюкокортикоид</div>
+      <div class="hc-name">Кортизол</div>
+      <div class="hc-alt">Основной стрессовый гормон</div>
+      <div class="hc-source">📍 Кора надпочечников</div>
+      <div class="hc-role">Поддерживает организм в состоянии готовности часами. Повышает сахар в крови, подавляет пищеварение и иммунитет. Хронически высокий уровень разрушает нейроны гиппокампа.</div>
+      <span class="hc-badge badge-threat">Гормон тревоги · Долгосрочный</span>
+    </div>
+
+    <div class="hormone-card">
+      <div class="hc-type">Рилизинг-гормон</div>
+      <div class="hc-name">CRH</div>
+      <div class="hc-alt">Кортикотропин-рилизинг-гормон</div>
+      <div class="hc-source">📍 Гипоталамус</div>
+      <div class="hc-role">Инициирует весь каскад ГГН-оси. Центральный сигнал тревоги мозга: запускает выброс ACTH, который в свою очередь активирует синтез кортизола. Перспективная мишень для новых препаратов.</div>
+      <span class="hc-badge badge-threat">Триггер каскада</span>
+    </div>
+
+    <div class="hormone-card">
+      <div class="hc-type">Тропный гормон</div>
+      <div class="hc-name">ACTH</div>
+      <div class="hc-alt">Адренокортикотропный гормон</div>
+      <div class="hc-source">📍 Гипофиз</div>
+      <div class="hc-role">Промежуточное звено ГГН-оси. Путешествует через кровоток к коре надпочечников и запускает синтез кортизола. Его блокада — один из принципов работы окситоцина.</div>
+      <span class="hc-badge badge-threat">Промежуточный мессенджер</span>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- BETA-BLOCKERS -->
+<section class="section" id="blockers">
+  <div class="sec-tag">03 · Фармакология</div>
+  <h2>Бета-адреноблокаторы: выключить симптомы</h2>
+  <p style="max-width:680px; color:var(--dim)">Бета-блокаторы не останавливают выброс адреналина — они блокируют его воздействие на рецепторы органов, разрывая порочный круг между физиологическим возбуждением и психологической паникой.</p>
+
+  <div class="bb-layout">
+    <div class="bb-panel">
+      <h3>Что блокирует пропранолол</h3>
+      <ul class="bb-list">
+        <li>Учащённое сердцебиение и ощущение «выпрыгивающего сердца»</li>
+        <li>Тремор рук и дрожание голоса</li>
+        <li>Чрезмерное потоотделение и одышку</li>
+        <li>Через ГЭБ — снижает центральную тревожность</li>
+      </ul>
+      <div style="margin-top:1.25rem; padding:1rem; background:rgba(232,64,64,0.05); border-radius:8px; border:1px solid rgba(232,64,64,0.1); font-size:0.82rem; color:var(--dim)">
+        ⚠ Не устраняет когнитивные причины страха — мысли о угрозе остаются. При ГТР может быть неэффективен.
+      </div>
+    </div>
+    <div class="bb-panel">
+      <h3>Риски и противопоказания</h3>
+      <ul class="risk-list">
+        <li><strong>Кардио:</strong> брадикардия, гипотензия</li>
+        <li><strong>Дыхание:</strong> спазм дыхательных путей при астме</li>
+        <li><strong>ЦНС:</strong> кошмары, дезориентация, депрессия</li>
+        <li><strong>Метаболизм:</strong> маскирует симптомы гипогликемии у диабетиков</li>
+        <li><strong>Токсичность:</strong> передозировка → сердечная недостаточность</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ANTAGONISTS -->
+<section class="section" id="antagonists">
+  <div class="sec-tag">04 · Природные тормоза</div>
+  <h2>Окситоцин и эндорфины — биологические антагонисты</h2>
+  <p style="max-width:640px; color:var(--dim)">Если адреналин и кортизол — двигатели страха, то окситоцин и эндорфины — его биологические тормоза. Они подавляют активность стрессовых систем прямо в мозге.</p>
+
+  <div class="antag-grid">
+    <div class="antag-card">
+      <div class="antag-title">Окситоцин</div>
+      <div class="antag-tag">Гормон привязанности · Антагонист ГГН-оси</div>
+      <div class="antag-mechanisms">
+        <div class="mech">
+          <strong>↓ CRH</strong>
+          Активирует ГАМК-ергические нейроны, тормозящие выброс кортикотропин-рилизинг-гормона
+        </div>
+        <div class="mech">
+          <strong>↓ ACTH</strong>
+          Напрямую блокирует клетки гипофиза, препятствуя выбросу адренокортикотропного гормона
+        </div>
+        <div class="mech">
+          <strong>Модуляция амигдалы</strong>
+          Снижает гиперреактивность миндалевидного тела, повышая значимость «сигналов безопасности»
+        </div>
+        <div class="mech">
+          <strong>⚠ Контекстуальность</strong>
+          В безопасной среде снижает тревогу. Во враждебной — может усилить бдительность к угрозам
+        </div>
+      </div>
+    </div>
+
+    <div class="antag-card">
+      <div class="antag-title">Эндорфины</div>
+      <div class="antag-tag">Опиоиды мозга · Естественные анальгетики</div>
+      <div class="antag-mechanisms">
+        <div class="mech">
+          <strong>Выброс дофамина</strong>
+          Блокируют тормозные ГАМК-нейроны → дофамин в нуклеус аккумбенс → эйфория, снижение дисфории
+        </div>
+        <div class="mech">
+          <strong>Подавление амигдалы</strong>
+          Снижают возбуждающую глутаматную передачу в миндалевидном теле, гася цепи страха
+        </div>
+        <div class="mech">
+          <strong>↓ Норадреналин</strong>
+          В голубом пятне (locus coeruleus) замедляют ЧСС и уменьшают беспокойство
+        </div>
+        <div class="mech">
+          <strong>Физические упражнения</strong>
+          Наиболее доступный способ стимуляции — даёт долгосрочную устойчивость к стрессу
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- NUTRIENTS -->
+<section class="section" id="nutrients">
+  <div class="sec-tag">05 · Нутритивная поддержка</div>
+  <h2>Биохимическое регулирование через питание</h2>
+  <p style="max-width:640px; color:var(--dim)">Критически важна поддержка надпочечников и ГГН-оси через нутриенты — без этой базы фармакологические и поведенческие стратегии менее эффективны.</p>
+
+  <div class="nutr-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Нутриент / Растение</th>
+          <th>Механизм действия</th>
+          <th>Эффект при страхе</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="nutr-name">Магний</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--amber)">Глицинат / Треонат</div></td>
+          <td>Активация ГАМК-рецепторов, блокада NMDA-рецепторов, снижение ACTH</td>
+          <td>Успокоение НС, снижение физического напряжения, мышечного тремора</td>
+        </tr>
+        <tr>
+          <td><div class="nutr-name">Ашваганда</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--amber)">Withania somnifera</div></td>
+          <td>Ингибирование каскада ГГН-оси, мягкий седативный эффект</td>
+          <td>−23% кортизола за 2 месяца, улучшение качества сна</td>
+        </tr>
+        <tr>
+          <td><div class="nutr-name">Родиола розовая</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--amber)">Rhodiola rosea</div></td>
+          <td>Адаптоген со стимулирующим эффектом, нормализация кортизола</td>
+          <td>Борьба с когнитивным выгоранием при хроническом страхе</td>
+        </tr>
+        <tr>
+          <td><div class="nutr-name">Витамин C</div></td>
+          <td>Поддержка синтеза стероидов в надпочечниках, антиоксидант</td>
+          <td>Снижение окислительного стресса, вызванного хроническим страхом</td>
+        </tr>
+        <tr>
+          <td><div class="nutr-name">Витамины группы B</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--amber)">B6, B9, B12</div></td>
+          <td>Синтез серотонина, дофамина и ГАМК</td>
+          <td>Стабилизация настроения, улучшение когнитивного контроля</td>
+        </tr>
+        <tr>
+          <td><div class="nutr-name">Омега-3 ЖК</div><div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--amber)">ДГК + ЭПК</div></td>
+          <td>Снижение нейровоспаления, оптимизация мембран нейронов</td>
+          <td>Улучшение пластичности мозга, снижение реактивности амигдалы</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CIRCADIAN -->
+  <div class="circadian" style="margin-top:2.5rem">
+    <div class="circadian-title">Циркадный ритм: кортизол vs мелатонин</div>
+    <div class="clock-bar">
+      <div class="clock-track"></div>
+      <div class="cortisol-bar"><span class="bar-label" style="color:rgba(255,255,255,0.8)">КОРТИЗОЛ ↑ утро</span></div>
+      <div class="melatonin-bar"><span class="bar-label" style="color:rgba(255,255,255,0.8)">МЕЛАТОНИН ↑ ночь</span></div>
+    </div>
+    <div class="clock-times">
+      <span>06:00 Рассвет</span>
+      <span>12:00 Полдень</span>
+      <span>18:00 Вечер</span>
+      <span>00:00 Полночь</span>
+    </div>
+    <p class="circadian-note">
+      Хронический страх нарушает этот баланс: постоянно высокий кортизол блокирует мелатонин →<br>
+      бессонница → ещё более реактивная амигдала на следующий день
+    </p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- FUTURE -->
+<section class="section" id="future">
+  <div class="sec-tag">06 · Горизонт 2025–2026</div>
+  <h2>Новые мишени и препараты</h2>
+  <p style="max-width:640px; color:var(--dim)">Фармакология движется к более специфическим мишеням, воздействуя на отдельные узлы каскада страха — без системных побочных эффектов классических препаратов.</p>
+
+  <div class="future-grid">
+    <div class="future-card">
+      <div class="future-num">Разработка 01</div>
+      <div class="future-name">Антагонисты CRH1</div>
+      <div class="future-mech">Блокируют действие кортикотропин-рилизинг-гормона прямо в мозге — купируют стресс на самом верхнем уровне каскада, предотвращая выброс как ACTH, так и кортизола.</div>
+      <span class="future-tag">Клинические испытания</span>
+    </div>
+    <div class="future-card">
+      <div class="future-num">Разработка 02</div>
+      <div class="future-name">MM120 (MindMed)</div>
+      <div class="future-mech">Производное ЛСД. Однократный приём даёт снижение симптомов ГТР на срок до 12 недель — вероятно, через глубокую нейропластическую перестройку нейронных сетей страха.</div>
+      <span class="future-tag">Фаза 2b/3</span>
+    </div>
+    <div class="future-card">
+      <div class="future-num">Разработка 03</div>
+      <div class="future-name">Фазедиенол</div>
+      <div class="future-mech">Назальный спрей на основе феромонов. Воздействует на обонятельные нервы, напрямую соединённые с амигдалой и гипоталамусом — без попадания в общий кровоток.</div>
+      <span class="future-tag">FDA Breakthrough</span>
+    </div>
+    <div class="future-card">
+      <div class="future-num">Разработка 04</div>
+      <div class="future-name">Seltorexant</div>
+      <div class="future-mech">Антагонист орексиновых рецепторов. Нормализует гипервозбуждение и избыточный выброс кортизола, помогая при тревоге и депрессии с нарушениями сна.</div>
+      <span class="future-tag">J&J · 2026 данные</span>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- STRATEGY -->
+<section class="section" id="strategy">
+  <div class="sec-tag">07 · Стратегия</div>
+  <h2>Комплексный подход к управлению страхом</h2>
+  <p style="max-width:640px; color:var(--dim); margin-bottom:0.5rem">Невозможно просто «выключить» адреналин или кортизол без ущерба для здоровья. Цель — гормональный гомеостаз, а не подавление реакций.</p>
+
+  <div class="strategy-steps">
+    <div class="strat-step">
+      <div class="strat-num">01</div>
+      <div class="strat-content">
+        <h3>Краткосрочное купирование</h3>
+        <p>Бета-блокаторы (пропранолол) для устранения периферических симптомов адреналинового шторма. Эффект за 30–60 минут, без воздействия на когнитивную функцию.</p>
+      </div>
+    </div>
+    <div class="strat-step">
+      <div class="strat-num">02</div>
+      <div class="strat-content">
+        <h3>Активация природных тормозов</h3>
+        <p>Стимуляция выброса окситоцина (социальная поддержка, прикосновение) и эндорфинов (физическая активность, смех). Диафрагмальное дыхание активирует блуждающий нерв — немедленный сигнал безопасности.</p>
+      </div>
+    </div>
+    <div class="strat-step">
+      <div class="strat-num">03</div>
+      <div class="strat-content">
+        <h3>Метаболическая поддержка</h3>
+        <p>Магний, витамины B-группы, Омега-3 и адаптогены (ашваганда, родиола) для нормальной работы ГГН-оси. Холодовое воздействие тренирует систему возвращения к базовому уровню.</p>
+      </div>
+    </div>
+    <div class="strat-step">
+      <div class="strat-num">04</div>
+      <div class="strat-content">
+        <h3>Когнитивная перестройка</h3>
+        <p>КПТ усиливает тормозное влияние префронтальной коры на амигдалу. После успешного курса МРТ показывает уменьшение объёма амигдалы и укрепление связей с ПФК — измеримые биологические изменения.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="warning-box">
+  <strong>Важно:</strong> Полное подавление кортизола и адреналина опасно для жизни. Эти гормоны необходимы для поддержания давления, уровня глюкозы и иммунного ответа. Длительная супрессия ГГН-оси может привести к надпочечниковой недостаточности и аддисоническому кризу. Любые фармакологические вмешательства требуют консультации врача.
+</div>
+
+<!-- CONCLUSION -->
+<section class="conclusion">
+  <div class="sec-tag">Заключение</div>
+  <div class="conclusion-quote" style="margin-top:1.5rem">
+    «Только понимание страха как динамической системы, а не как единичного враждебного гормона, позволяет взять под контроль свои биологические реакции.»
+  </div>
+  <p style="color:var(--dim); max-width:650px; font-size:1rem">
+    На горизонте 2026 года новые таргетные терапии — от назальных феромонов до антагонистов CRH1 — обещают ещё более точные инструменты для управления этими древними механизмами выживания.
+  </p>
+</section>
+
+<div class="rule"></div>
+<footer>
+  <span>Нейроэндокринная регуляция страха · 2026</span>
+  <span>60 научных источников</span>
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+// ── HEARTBEAT / EKG CANVAS ─────────────────────────────
+const canvas = document.getElementById('pulse-canvas');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Generate EKG-like wave points
+function ekgSegment(cx, cy, scale) {
+  return [
+    [cx, cy],
+    [cx + 10*scale, cy],
+    [cx + 14*scale, cy - 4*scale],
+    [cx + 18*scale, cy],
+    [cx + 22*scale, cy - 28*scale],  // P wave
+    [cx + 26*scale, cy + 10*scale],  // QRS down
+    [cx + 29*scale, cy - 55*scale],  // R peak
+    [cx + 32*scale, cy + 8*scale],   // S wave
+    [cx + 36*scale, cy - 8*scale],   // T wave start
+    [cx + 42*scale, cy - 18*scale],  // T peak
+    [cx + 50*scale, cy],
+    [cx + 80*scale, cy],
+  ];
+}
+
+let lines = [];
+const numLines = 3;
+for (let i = 0; i < numLines; i++) {
+  lines.push({
+    x: (Math.random() * W),
+    y: H * (0.2 + i * 0.3 + Math.random() * 0.1),
+    speed: 0.4 + Math.random() * 0.3,
+    scale: 0.5 + Math.random() * 0.5,
+    alpha: 0.06 + Math.random() * 0.06,
+    color: i === 0 ? '232,64,64' : i === 1 ? '240,150,42' : '200,80,80'
+  });
+}
+
+function drawEkg() {
+  ctx.clearRect(0, 0, W, H);
+
+  lines.forEach(line => {
+    const pts = ekgSegment(line.x, line.y, line.scale);
+    const totalW = 80 * line.scale;
+
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    pts.forEach(p => ctx.lineTo(p[0], p[1]));
+
+    ctx.strokeStyle = `rgba(${line.color},${line.alpha})`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Also draw a horizontal baseline extending
+    ctx.beginPath();
+    ctx.moveTo(line.x - 200, line.y);
+    ctx.lineTo(pts[0][0], line.y);
+    ctx.strokeStyle = `rgba(${line.color},${line.alpha * 0.5})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+
+    line.x += line.speed;
+    if (line.x > W + 200) {
+      line.x = -80 * line.scale;
+      line.y = H * (0.15 + Math.random() * 0.7);
+    }
+  });
+
+  requestAnimationFrame(drawEkg);
+}
+drawEkg();
+
+// ── SCROLL REVEAL ────────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll(
+  '.hormone-card, .bb-panel, .antag-card, .future-card, .strat-step, .path-step'
+).forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(18px)';
+  el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+  io.observe(el);
+});
+</script>
+</body>
+</html>
