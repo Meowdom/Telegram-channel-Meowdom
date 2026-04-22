@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест на Эмпатию · Meowdom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #00D4FF;
+    --blue-dim: #0099BB;
+    --blue-glow: rgba(0, 212, 255, 0.18);
+    --blue-glow2: rgba(0, 212, 255, 0.08);
+    --bg: #06080D;
+    --bg2: #0C1018;
+    --bg3: #121820;
+    --card: #0F151E;
+    --border: rgba(0, 212, 255, 0.15);
+    --border-hover: rgba(0, 212, 255, 0.5);
+    --text: #E8EDF5;
+    --text-dim: #7A8DA0;
+    --text-muted: #3D4F60;
+    --gold: #FFD166;
+    --pink: #FF6B9D;
+    --green: #57E5A0;
+    --purple: #B66EFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Radial glow */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 36px 0 28px;
+    text-align: center;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .channel-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px 16px 6px 10px;
+    font-size: 11px;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    margin-bottom: 24px;
+    text-decoration: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .channel-badge:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 0 20px var(--blue-glow);
+  }
+  .channel-badge .dot {
+    width: 7px; height: 7px;
+    background: var(--blue);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--blue);
+    animation: pulse 2s ease infinite;
+  }
+
+  .cat-logo {
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(0,212,255,0.4));
+    animation: float 4s ease-in-out infinite;
+  }
+
+  h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  h1 span { color: var(--blue); }
+
+  .subtitle {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    max-width: 440px;
+    margin: 0 auto 0;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    margin-bottom: 28px;
+    animation: fadeDown 0.7s 0.2s ease both;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+  .progress-meta .q-count { color: var(--blue); font-weight: 700; }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--bg3);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue-dim), var(--blue));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px var(--blue);
+    width: 0%;
+  }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 28px 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease both;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0.6;
+  }
+
+  .q-scenario {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    background: var(--blue-glow2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 10px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .q-text {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(13px, 3vw, 15px);
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .q-context {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    background: rgba(0,212,255,0.04);
+    border-left: 2px solid var(--border);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .option {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    text-align: left;
+  }
+
+  .option:hover {
+    border-color: var(--border-hover);
+    background: var(--bg3);
+    transform: translateX(4px);
+    box-shadow: -4px 0 0 var(--blue), 0 0 20px var(--blue-glow2);
+  }
+
+  .option.selected {
+    border-color: var(--blue);
+    background: var(--blue-glow2);
+    box-shadow: -4px 0 0 var(--blue), 0 0 30px var(--blue-glow);
+  }
+
+  .option.correct {
+    border-color: var(--green);
+    background: rgba(87, 229, 160, 0.08);
+    box-shadow: -4px 0 0 var(--green);
+  }
+
+  .option.wrong {
+    border-color: var(--pink);
+    background: rgba(255, 107, 157, 0.06);
+    box-shadow: -4px 0 0 var(--pink);
+  }
+
+  .option.disabled { pointer-events: none; }
+
+  .opt-letter {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: var(--bg3);
+    border: 1px solid var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    transition: all 0.25s;
+    margin-top: 1px;
+  }
+  .option.selected .opt-letter,
+  .option:hover .opt-letter {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--bg);
+  }
+  .option.correct .opt-letter {
+    background: var(--green);
+    border-color: var(--green);
+    color: var(--bg);
+  }
+  .option.wrong .opt-letter {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: var(--bg);
+  }
+
+  .opt-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text);
+    border: 1px solid;
+    animation: fadeUp 0.4s ease both;
+  }
+  .feedback.show { display: block; }
+  .feedback.good {
+    background: rgba(87, 229, 160, 0.06);
+    border-color: rgba(87, 229, 160, 0.25);
+  }
+  .feedback.neutral {
+    background: rgba(0, 212, 255, 0.05);
+    border-color: rgba(0, 212, 255, 0.2);
+  }
+  .feedback-icon { margin-right: 6px; }
+
+  /* ── NEXT BUTTON ── */
+  .btn-next {
+    display: none;
+    width: 100%;
+    margin-top: 18px;
+    padding: 16px;
+    background: transparent;
+    border: 1px solid var(--blue);
+    border-radius: 12px;
+    color: var(--blue);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-next::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--blue);
+    transform: translateX(-101%);
+    transition: transform 0.3s ease;
+    z-index: 0;
+  }
+  .btn-next:hover::before { transform: translateX(0); }
+  .btn-next:hover { color: var(--bg); }
+  .btn-next span { position: relative; z-index: 1; }
+  .btn-next.show { display: block; animation: fadeUp 0.4s ease both; }
+
+  /* ── RESULTS ── */
+  #results {
+    display: none;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .result-header {
+    text-align: center;
+    padding: 36px 0 28px;
+  }
+
+  .result-emoji {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 24px rgba(0,212,255,0.5));
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .result-type {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .result-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(20px, 5vw, 26px);
+    font-weight: 900;
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+
+  .result-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    max-width: 500px;
+    margin: 0 auto 28px;
+  }
+
+  /* Score bars */
+  .score-bars {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-bars::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0.5;
+  }
+
+  .score-title {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .score-row:last-child { margin-bottom: 0; }
+
+  .score-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 110px;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+
+  .score-track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .score-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+  }
+  .score-fill.cog { background: linear-gradient(90deg, var(--blue-dim), var(--blue)); box-shadow: 0 0 8px var(--blue); }
+  .score-fill.aff { background: linear-gradient(90deg, #c0337d, var(--pink)); box-shadow: 0 0 8px var(--pink); }
+  .score-fill.som { background: linear-gradient(90deg, #1da870, var(--green)); box-shadow: 0 0 8px var(--green); }
+
+  .score-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    width: 30px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Trait cards */
+  .traits {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media(max-width: 420px) { .traits { grid-template-columns: 1fr; } }
+
+  .trait-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .trait-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 0 24px var(--blue-glow2);
+  }
+  .trait-card .tc-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+  .trait-card .tc-name {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .trait-card .tc-desc { font-size: 11px; color: var(--text-dim); line-height: 1.6; }
+
+  /* CTA */
+  .result-cta {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-cta::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0.4;
+  }
+
+  .cta-text {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    margin-bottom: 18px;
+  }
+  .cta-text strong { color: var(--blue); }
+
+  .btn-channel {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--blue);
+    color: var(--bg);
+    text-decoration: none;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 14px 28px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 30px rgba(0,212,255,0.3);
+  }
+  .btn-channel:hover {
+    background: #33DEFF;
+    box-shadow: 0 0 50px rgba(0,212,255,0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-restart {
+    display: block;
+    margin: 14px auto 0;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: color 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .btn-restart:hover { color: var(--text-dim); }
+
+  /* ── SCREEN: intro ── */
+  #intro { animation: fadeDown 0.7s ease both; }
+
+  .intro-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0.5;
+  }
+  .intro-card h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .intro-card p {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    margin-bottom: 10px;
+  }
+  .intro-card p:last-child { margin-bottom: 0; }
+
+  .intro-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .intro-tag {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    background: var(--bg3);
+  }
+
+  .btn-start {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #0099BB, var(--blue));
+    border: none;
+    border-radius: 14px;
+    color: var(--bg);
+    font-family: 'Unbounded', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 40px rgba(0,212,255,0.25);
+    margin-top: 8px;
+  }
+  .btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 50px rgba(0,212,255,0.4);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--blue); }
+    50%       { opacity: 0.5; box-shadow: 0 0 4px var(--blue); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  /* Scanline effect */
+  .scanline {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding-top: 24px;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+  .footer a { color: var(--blue-dim); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <a href="https://t.me/meowdomitsme" class="channel-badge" target="_blank">
+      <span class="dot"></span>
+      t.me/meowdomitsme
+    </a>
+    <span class="cat-logo">🐱</span>
+    <h1>Архитектура<br><span>Эмпатии</span></h1>
+    <p class="subtitle">Нейронаука говорит: сочувствие — это не черта характера, а многослойная система. Узнай, какой канал у тебя доминирует.</p>
+  </div>
+
+  <!-- INTRO SCREEN -->
+  <div id="intro">
+    <div class="intro-card">
+      <h2>// Что измеряем</h2>
+      <p>Три независимых компонента эмпатии — когнитивный (понимание), аффективный (резонанс) и соматический (телесное отражение) — активируют разные нейронные сети. Тест основан на реальных клинических сценариях.</p>
+      <p>Никаких правильных ответов — только честных. Пройди 10 вопросов и узнай свой профиль.</p>
+      <div class="intro-tags">
+        <span class="intro-tag">10 вопросов</span>
+        <span class="intro-tag">~5 минут</span>
+        <span class="intro-tag">нейробиология</span>
+        <span class="intro-tag">без правильных ответов</span>
+      </div>
+    </div>
+    <button class="btn-start" onclick="startTest()">▶ НАЧАТЬ ТЕСТ</button>
+    <div class="footer" style="margin-top:24px;">
+      <a href="https://t.me/meowdomitsme" target="_blank">Meowdom</a> · цифровая экономика и ИИ
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quiz" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span>ВОПРОС <span class="q-count" id="q-num">1</span> / 10</span>
+        <span id="q-label" style="color:var(--text-muted);">—</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div class="question-card" id="q-card">
+      <div class="q-scenario" id="q-scenario">Сценарий</div>
+      <div class="q-context" id="q-context" style="display:none;"></div>
+      <div class="q-text" id="q-text">Текст вопроса</div>
+      <div class="options" id="options-list"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">
+      <span id="btn-next-label">СЛЕДУЮЩИЙ ВОПРОС →</span>
+    </button>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="results">
+    <div class="result-header">
+      <span class="result-emoji" id="res-emoji">🧠</span>
+      <div class="result-type">Твой профиль эмпатии</div>
+      <h1 class="result-title" id="res-title">Архитектор смыслов</h1>
+      <p class="result-desc" id="res-desc">Описание типа</p>
+    </div>
+
+    <div class="score-bars">
+      <div class="score-title">// Распределение по компонентам</div>
+      <div class="score-row">
+        <span class="score-label">Когнитивная</span>
+        <div class="score-track"><div class="score-fill cog" id="bar-cog"></div></div>
+        <span class="score-val" id="val-cog">0</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Аффективная</span>
+        <div class="score-track"><div class="score-fill aff" id="bar-aff"></div></div>
+        <span class="score-val" id="val-aff">0</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Соматическая</span>
+        <div class="score-track"><div class="score-fill som" id="bar-som"></div></div>
+        <span class="score-val" id="val-som">0</span>
+      </div>
+    </div>
+
+    <div class="traits" id="traits-grid"></div>
+
+    <div class="result-cta">
+      <p class="cta-text">
+        Больше о нейробиологии эмпатии, ИИ-инструментах и цифровой экономике —<br>
+        <strong>каждую неделю в канале Meowdom</strong>
+      </p>
+      <a href="https://t.me/meowdomitsme" class="btn-channel" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.01 9.471c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.873.75z"/>
+        </svg>
+        Открыть канал
+      </a>
+      <button class="btn-restart" onclick="restart()">↻ Пройти снова</button>
+    </div>
+
+    <div class="footer" style="margin-top:28px;">
+      Тест основан на методологии IRI (Davis), CASES и клинических сценариях · <a href="https://t.me/meowdomitsme" target="_blank">@meowdomitsme</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    scenario: "Сценарий 01 · Двусмысленный триумф",
+    context: "Друг получил должность, на которую претендовал и ты. За ужином он говорит «мне просто повезло», но ты замечаешь новые дорогие часы, которые он прячет под рукавом.",
+    text: "Что ты замечаешь в первую очередь?",
+    options: [
+      { text: "Что другу стыдно за свой успех передо мной — он боится испортить отношения", type: "cog" },
+      { text: "Я чувствую его напряжение и скрытую радость одновременно — это физически ощутимо", type: "aff" },
+      { text: "Инстинктивно замечаю его движения: плечи подняты, рукав оттянут вниз", type: "som" },
+      { text: "Скромничает — это приятно, но немного неловко", type: "none" }
+    ]
+  },
+  {
+    scenario: "Сценарий 01 · Двусмысленный триумф",
+    context: null,
+    text: "Как ты реагируешь на прячущиеся часы?",
+    options: [
+      { text: "«Алекс, покажи часы — не надо прятать от меня свой успех»", type: "cog" },
+      { text: "Тепло смотрю на него — я рад за него, несмотря на горечь", type: "aff" },
+      { text: "Расслабляю плечи и открываю жесты, чтобы снять напряжение за столом", type: "som" },
+      { text: "Делаю вид, что не замечаю — зачем обострять", type: "none" }
+    ]
+  },
+  {
+    scenario: "Сценарий 02 · Деменция и белая ложь",
+    context: "Пожилая тётя Мария с деменцией рассказывает, что муж вернётся из командировки. Он умер 10 лет назад. Она спрашивает: «Ты ведь помнишь, он обещал привезти то синее платье?»",
+    text: "Что ты делаешь?",
+    options: [
+      { text: "«Да, он всегда знал, какой цвет тебе больше всего идёт» — вхожу в её реальность", type: "cog" },
+      { text: "Чувствую её нежность к мужу — и отвечаю из этого чувства, а не из фактов", type: "aff" },
+      { text: "Незаметно замедляю речь и дыхание, подстраиваясь под её темп", type: "som" },
+      { text: "Напоминаю мягко, что муж умер — ложь не поможет ей", type: "none" }
+    ]
+  },
+  {
+    scenario: "Сценарий 02 · Деменция и белая ложь",
+    context: null,
+    text: "Что ты чувствуешь в этот момент?",
+    options: [
+      { text: "Понимаю: её субъективная правда важнее объективной реальности прямо сейчас", type: "cog" },
+      { text: "Меня захватывает её любовь — я почти вижу этого человека рядом с ней", type: "aff" },
+      { text: "Чувствую, как тело само замедляется и становится тише рядом с ней", type: "som" },
+      { text: "Мне неловко — не знаю, как правильно поступить", type: "none" }
+    ]
+  },
+  {
+    scenario: "Сценарий 03 · Саркастическая мольба",
+    context: "Коллега Иван провалил важный отчёт. Когда ты заходишь, он не смотрит на тебя и бросает: «О, пришёл посмотреть на обломки карьеры? Шоу бесплатное».",
+    text: "Что ты слышишь за этими словами?",
+    options: [
+      { text: "Сарказм — защитный механизм человека в настоящем отчаянии", type: "cog" },
+      { text: "Боль за фасадом агрессии — я чувствую её почти физически", type: "aff" },
+      { text: "Напряжение в воздухе — тело автоматически переходит в режим спокойствия", type: "som" },
+      { text: "Грубость, на которую не хочется отвечать", type: "none" }
+    ]
+  },
+  {
+    scenario: "Сценарий 03 · Саркастическая мольба",
+    context: null,
+    text: "Что ты говоришь Ивану?",
+    options: [
+      { text: "«День выдался паршивым. Нужна помощь с цифрами или лучше оставить тебя?»", type: "cog" },
+      { text: "Молча сажусь рядом — не говорю ничего, просто остаюсь", type: "aff" },
+      { text: "«Я знаю, сколько времени ты вложил в этот отчёт» — и жду, как он отреагирует", type: "som" },
+      { text: "Ухожу — не буду терпеть агрессию", type: "none" }
+    ]
+  },
+  {
+    scenario: "Сценарий 04 · Культурный конфликт",
+    context: "Ты врач. Пациент после операции говорит «всё в порядке», но пульс зашкаливает, зрачки расширены. Жена умоляет дать обезболивающее, он злобно: «Замолчи, я не немощный».",
+    text: "Что ты понимаешь об этой ситуации?",
+    options: [
+      { text: "Конфликт между физической болью и культурной идентичностью — нужно сохранить ему лицо", type: "cog" },
+      { text: "Я одновременно чувствую страх жены и гордость мужа — и мне нужно удержать оба", type: "aff" },
+      { text: "Тело само напрягается в ответ на его скрытое страдание — я физически вижу боль", type: "som" },
+      { text: "Пациент отказывается — это его право, запишу в карту", type: "none" }
+    ]
+  },
+  {
+    scenario: "Сценарий 04 · Культурный конфликт",
+    context: null,
+    text: "Как ты предлагаешь обезболивающее?",
+    options: [
+      { text: "«Это не от боли — для ускорения регенерации, чтобы встать на ноги уже завтра»", type: "cog" },
+      { text: "Обращаюсь к ним обоим: нахожу слова, которые уважают его и успокаивают её", type: "aff" },
+      { text: "Слегка касаюсь его руки, оцениваю мышечное напряжение молча", type: "som" },
+      { text: "«По приборам вам больно — необходимо принять обезболивающее»", type: "none" }
+    ]
+  },
+  {
+    scenario: "Общий · Чужая радость",
+    context: null,
+    text: "Лучший друг позвонил сказать, что получил работу твоей мечты. Твоя первая реакция?",
+    options: [
+      { text: "Думаю о том, что он сейчас чувствует — и говорю об этом вслух", type: "cog" },
+      { text: "Его энергия буквально передаётся мне — я радуюсь по-настоящему", type: "aff" },
+      { text: "Чувствую сжатие в груди, выдыхаю — и искренне улыбаюсь", type: "som" },
+      { text: "Поздравляю и быстро заканчиваю разговор", type: "none" }
+    ]
+  },
+  {
+    scenario: "Общий · Внутренний дисбаланс",
+    context: null,
+    text: "Тебе грустно, а рядом кто-то переживает радость. Что происходит?",
+    options: [
+      { text: "Нахожу способ разделить их радость — анализирую и выбираю нужные слова", type: "cog" },
+      { text: "Их энергия слегка поднимает меня — я невольно заряжаюсь", type: "aff" },
+      { text: "Буквально чувствую лёгкость в их мимике и зеркалю её телом", type: "som" },
+      { text: "Ухожу, чтобы не испортить их момент", type: "none" }
+    ]
+  }
+];
+
+const profiles = {
+  cog: {
+    emoji: "🧠",
+    title: "Архитектор Смыслов",
+    desc: "Ты понимаешь людей как нейросеть — анализируешь контекст, считываешь скрытые мотивы и намерения. Когнитивная эмпатия позволяет тебе видеть «систему» за поведением человека. Риск: иногда можно понять всё — и при этом ничего не почувствовать.",
+    traits: [
+      { icon: "🔍", name: "Ментализация", desc: "Интуитивно строишь модель психики другого человека" },
+      { icon: "🎭", name: "Считываешь подтекст", desc: "Видишь разрыв между словами и истинными намерениями" },
+      { icon: "⚡", name: "Точные слова", desc: "Знаешь, что сказать — и когда именно это сделать" },
+      { icon: "⚖️", name: "Риск: дистанция", desc: "Анализ без чувства может создавать холодность" }
+    ]
+  },
+  aff: {
+    emoji: "💙",
+    title: "Резонатор",
+    desc: "Ты чувствуешь то, что чувствуют другие — буквально. Аффективная эмпатия делает тебя незаменимым в поддержке, но требует осознанной защиты от чужого дистресса. Нейронаука подтверждает: твоя передняя островковая доля работает на полную.",
+    traits: [
+      { icon: "🌊", name: "Эмоциональный резонанс", desc: "Чужое состояние передаётся тебе напрямую" },
+      { icon: "🤝", name: "Эмпатическая забота", desc: "Ориентирован на другого, а не на свой дискомфорт" },
+      { icon: "🌡️", name: "Чувствуешь атмосферу", desc: "Считываешь эмоции комнаты ещё до слов" },
+      { icon: "🔋", name: "Риск: выгорание", desc: "Поглощение чужой боли без фильтра истощает" }
+    ]
+  },
+  som: {
+    emoji: "🌿",
+    title: "Телесный Эмпат",
+    desc: "Твоё тело всегда на шаг впереди разума. Соматическая эмпатия — самый древний и непроизвольный вид: ты зеркалишь чужие состояния через мышцы, дыхание, позу. Это невозможно сымитировать — и именно поэтому тебе доверяют инстинктивно.",
+    traits: [
+      { icon: "🪞", name: "Зеркальные нейроны", desc: "Моторное подражание происходит автоматически" },
+      { icon: "🌬️", name: "Синхронизация ритмов", desc: "Подстраиваешь дыхание и темп под собеседника" },
+      { icon: "📡", name: "Сенсорное считывание", desc: "Замечаешь微малейшие телесные сигналы другого" },
+      { icon: "🧘", name: "Риск: переактивация", desc: "Гиперчувствительность к физическому страданию" }
+    ]
+  },
+  balanced: {
+    emoji: "⚡",
+    title: "Консилиум Эмпатий",
+    desc: "У тебя открыты все три канала эмпатии. Ты понимаешь (когнитивно), чувствуешь (аффективно) и телесно отражаешь (соматически) — одновременно. Это редкий профиль, который в нейробиологии связан с высокой гибкостью социального интеллекта.",
+    traits: [
+      { icon: "🔺", name: "Три канала", desc: "Когнитивный, аффективный и соматический баланс" },
+      { icon: "🧩", name: "Контекстуальная гибкость", desc: "Адаптируешь тип эмпатии под ситуацию" },
+      { icon: "🌐", name: "Социальная точность", desc: "Видишь смыслы, чувствуешь резонанс, считываешь тело" },
+      { icon: "🎯", name: "Риск: перегрузка", desc: "Три активных канала требуют осознанного управления" }
+    ]
+  }
+};
+
+let current = 0;
+let scores = { cog: 0, aff: 0, som: 0, none: 0 };
+let answered = false;
+
+const letters = ['А', 'Б', 'В', 'Г'];
+
+function startTest() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[current];
+  const card = document.getElementById('q-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'slideUp 0.45s ease both';
+
+  document.getElementById('q-num').textContent = current + 1;
+  document.getElementById('q-scenario').textContent = q.scenario;
+  document.getElementById('q-text').textContent = q.text;
+
+  const ctx = document.getElementById('q-context');
+  if (q.context) {
+    ctx.textContent = q.context;
+    ctx.style.display = 'block';
+  } else {
+    ctx.style.display = 'none';
+  }
+
+  // Progress
+  document.getElementById('progress-fill').style.width = (current / questions.length * 100) + '%';
+
+  // Label
+  const labelMap = {
+    'Сценарий 01 · Двусмысленный триумф': '// Зависть и близость',
+    'Сценарий 02 · Деменция и белая ложь': '// Истина vs. Любовь',
+    'Сценарий 03 · Саркастическая мольба': '// Агрессия как SOS',
+    'Сценарий 04 · Культурный конфликт': '// Тело и достоинство',
+    'Общий · Чужая радость': '// Завидовать или радоваться',
+    'Общий · Внутренний дисбаланс': '// Со-присутствие'
+  };
+  document.getElementById('q-label').textContent = labelMap[q.scenario] || '';
+
+  // Options
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.dataset.type = opt.type;
+    div.innerHTML = `<span class="opt-letter">${letters[i]}</span><span class="opt-text">${opt.text}</span>`;
+    div.addEventListener('click', () => selectOption(div, opt.type));
+    list.appendChild(div);
+  });
+
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').style.display = '';
+  document.getElementById('btn-next').className = 'btn-next';
+  document.getElementById('btn-next-label').textContent =
+    current < questions.length - 1 ? 'СЛЕДУЮЩИЙ ВОПРОС →' : 'УВИДЕТЬ РЕЗУЛЬТАТ →';
+}
+
+function selectOption(el, type) {
+  if (answered) return;
+  answered = true;
+
+  document.querySelectorAll('.option').forEach(o => {
+    o.classList.add('disabled');
+    if (o.dataset.type !== 'none') {
+      o.classList.add('correct');
+    } else {
+      o.classList.add('wrong');
+    }
+  });
+
+  el.classList.remove('correct', 'wrong');
+  el.classList.add(type !== 'none' ? 'selected' : 'wrong');
+
+  scores[type]++;
+
+  // Feedback
+  const fb = document.getElementById('feedback');
+  const feedbacks = {
+    cog: { cls: 'good', text: '🧠 Когнитивная эмпатия — ты считываешь ментальное состояние другого, его намерения и скрытые смыслы. Медиальная префронтальная кора и TPJ в деле.' },
+    aff: { cls: 'good', text: '💙 Аффективный резонанс — ты разделяешь эмоцию другого, а не просто её распознаёшь. Передняя островковая доля (AI) и ACC активны.' },
+    som: { cls: 'good', text: '🌿 Соматическая эмпатия — зеркальные нейроны и тело действуют раньше сознания. Самый честный и неимитируемый вид отклика.' },
+    none: { cls: 'neutral', text: '🔸 Это социально приемлемый, но защитный ответ. Он помогает сберечь ресурс, но закрывает канал настоящего контакта.' }
+  };
+  const f = feedbacks[type];
+  fb.className = `feedback show ${f.cls}`;
+  fb.innerHTML = f.text;
+
+  document.getElementById('btn-next').classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) {
+    renderQuestion();
+  } else {
+    showResults();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+
+  const { cog, aff, som } = scores;
+  const total = cog + aff + som;
+  const max = Math.max(cog, aff, som);
+
+  // Determine profile
+  let profileKey;
+  const diff = Math.abs(cog - aff) + Math.abs(aff - som) + Math.abs(cog - som);
+  if (diff <= 2 && total >= 4) {
+    profileKey = 'balanced';
+  } else if (max === cog) {
+    profileKey = 'cog';
+  } else if (max === aff) {
+    profileKey = 'aff';
+  } else {
+    profileKey = 'som';
+  }
+
+  const p = profiles[profileKey];
+  document.getElementById('res-emoji').textContent = p.emoji;
+  document.getElementById('res-title').textContent = p.title;
+  document.getElementById('res-desc').textContent = p.desc;
+
+  // Bars
+  const maxPossible = 10;
+  setTimeout(() => {
+    document.getElementById('bar-cog').style.width = (cog / maxPossible * 100) + '%';
+    document.getElementById('bar-aff').style.width = (aff / maxPossible * 100) + '%';
+    document.getElementById('bar-som').style.width = (som / maxPossible * 100) + '%';
+    document.getElementById('val-cog').textContent = cog;
+    document.getElementById('val-aff').textContent = aff;
+    document.getElementById('val-som').textContent = som;
+  }, 100);
+
+  // Traits
+  const grid = document.getElementById('traits-grid');
+  grid.innerHTML = '';
+  p.traits.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'trait-card';
+    card.innerHTML = `<span class="tc-icon">${t.icon}</span><div class="tc-name">${t.name}</div><div class="tc-desc">${t.desc}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function restart() {
+  current = 0;
+  scores = { cog: 0, aff: 0, som: 0, none: 0 };
+  answered = false;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+</script>
+</body>
+</html>
